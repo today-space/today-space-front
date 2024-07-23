@@ -1,0 +1,43 @@
+/* --------------------
+  common css
+-------------------- */
+
+/* ---------- Topbar.js ---------- */
+
+.Topbar-header {
+  width: 100%;
+  height: 100px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.Topbar-container {
+  width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.Topbar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.Topbar-menu ul {
+  display: flex;
+}
+
+.Topbar-menu ul > li {
+  margin-left: 20px;
+}
+
+.Topbar-menu ul > li > a:hover {
+  color: var(--primary-color);
+}
+
+.Topbar-menu-logo {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
