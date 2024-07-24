@@ -1,0 +1,39 @@
+/* --------------------
+  page css
+-------------------- */
+
+/* ---------- Auth.js ---------- */
+
+.auth-background {
+  position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: #fff;
+}
+
+.auth-container {
+  width: 450px;
+	padding: 40px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1;
+	position: absolute;
+	background: #FFF;
+	box-shadow: 0 0px 70px rgba(0, 0, 0, 0.1);
+	border-top: 5px solid var(--primary-color);
+	float: left;
+}
+
+.auth-container-logo {
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.auth-container-logo > a {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--primary-color);
+}

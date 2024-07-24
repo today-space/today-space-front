@@ -21,3 +21,12 @@ ul {
   padding: 0;
   list-style: none;
 }
+
+input {
+  outline: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: normal;
+}
