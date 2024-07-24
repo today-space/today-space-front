@@ -34,13 +34,13 @@ function Signup() {
     if (e.key === "Enter") {
       handleCheckUsername();
     }
-  }
+  };
 
   const handleSignupEnter = (e) => {
     if (e.key === "Enter") {
       handleSignup();
     }
-  }
+  };
 
   const handleCheckUsername = () => {
 
@@ -75,7 +75,7 @@ function Signup() {
       }
     });
 
-  }
+  };
 
   const handleSignup = () => {
 
