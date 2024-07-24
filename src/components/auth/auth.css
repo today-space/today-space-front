@@ -45,6 +45,18 @@
 	color: var(--primary-color);
 }
 
+.auth-err-message {
+	color: red;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.auth-message {
+	color: var(--primary-color);
+	margin-bottom: 20px;
+	text-align: center;
+}
+
 /* ---------- signup.js ---------- */
 
 .signup-component-container-flex {
