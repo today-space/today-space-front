@@ -1,8 +1,11 @@
-# Use an official node runtime as a parent image
-FROM node:14
+# Base image with yum package manager
+FROM centos:7 as base
 
-# Install bzip2
-RUN apt-get update && apt-get install -y bzip2
+# Install node and compat-openssl10
+RUN yum install -y epel-release && \
+    curl -sL https://rpm.nodesource.com/setup_14.x | bash - && \
+    yum install -y nodejs && \
+    yum install -y compat-openssl10
 
 # Set the working directory
 WORKDIR /app
@@ -21,7 +24,9 @@ RUN npm run build
 
 # Use nginx to serve the app
 FROM nginx:alpine
-COPY --from=0 /app/build /usr/share/nginx/html
+
+# Copy the build directory from the previous stage
+COPY --from=base /app/build /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
