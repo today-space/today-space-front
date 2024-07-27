@@ -1,14 +1,20 @@
 # Use an official node runtime as a parent image
 FROM node:14
 
-# Install compat-openssl10
+# Install dependencies for building OpenSSL
 RUN apt-get update && \
-    apt-get install -y wget && \
-    wget http://mirror.centos.org/centos/7/os/x86_64/Packages/compat-openssl10-1.0.2o-3.el7.x86_64.rpm && \
-    apt-get install -y alien && \
-    alien -i compat-openssl10-1.0.2o-3.el7.x86_64.rpm && \
-    rm compat-openssl10-1.0.2o-3.el7.x86_64.rpm && \
-    apt-get clean
+    apt-get install -y wget build-essential
+
+# Download and install OpenSSL 1.0.2
+RUN wget https://www.openssl.org/source/openssl-1.0.2u.tar.gz && \
+    tar -xzf openssl-1.0.2u.tar.gz && \
+    cd openssl-1.0.2u && \
+    ./config --prefix=/usr/local/openssl-1.0.2u --openssldir=/usr/local/openssl-1.0.2u shared zlib && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf openssl-1.0.2u openssl-1.0.2u.tar.gz && \
+    ln -s /usr/local/openssl-1.0.2u/bin/openssl /usr/bin/openssl
 
 # Set the working directory
 WORKDIR /app
