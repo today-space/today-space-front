@@ -1,11 +1,14 @@
-# Base image with yum package manager
-FROM centos:7 as base
+# Use an official node runtime as a parent image
+FROM node:14
 
-# Install node and compat-openssl10
-RUN yum install -y epel-release && \
-    curl -sL https://rpm.nodesource.com/setup_14.x | bash - && \
-    yum install -y nodejs && \
-    yum install -y compat-openssl10
+# Install compat-openssl10
+RUN apt-get update && \
+    apt-get install -y wget && \
+    wget http://mirror.centos.org/centos/7/os/x86_64/Packages/compat-openssl10-1.0.2o-3.el7.x86_64.rpm && \
+    apt-get install -y alien && \
+    alien -i compat-openssl10-1.0.2o-3.el7.x86_64.rpm && \
+    rm compat-openssl10-1.0.2o-3.el7.x86_64.rpm && \
+    apt-get clean
 
 # Set the working directory
 WORKDIR /app
@@ -24,9 +27,7 @@ RUN npm run build
 
 # Use nginx to serve the app
 FROM nginx:alpine
-
-# Copy the build directory from the previous stage
-COPY --from=base /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
