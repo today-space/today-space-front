@@ -18,9 +18,6 @@ RUN npm run build
 # 2. Nginx 이미지에 빌드 결과물 포함
 FROM nginx:alpine
 
-# Nginx 설정 파일 복사
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # 빌드 결과물 복사
 COPY --from=build /app/build /usr/share/nginx/html
 
