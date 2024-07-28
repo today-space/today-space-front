@@ -11,12 +11,31 @@ function Oauth() {
   const dispatch = useDispatch();
   const params = useParams();
   const code = new URL(document.location.toString()).searchParams.get("code");
+  const state = new URL(document.location.toString()).searchParams.get("state");
 
   useEffect( () => {
 
     if (params.id === "kakao") {
       if (code) {
         axios.get(`${process.env.REACT_APP_API_URL}/v1/kakao/callback?code=${code}`, {
+          withCredentials: true
+        }).then( (res) => {
+          if (res.data.statusCode === 200) {
+
+            localStorage.setItem("accessToken", res.headers.authorization);
+            dispatch(setIsLogin(true));
+            navigate("/");
+
+          }
+        }).catch( (err) => {
+          console.log(err);
+        })
+      }
+    }
+
+    if (params.id === "naver") {
+      if (code && state) {
+        axios.get(`${process.env.REACT_APP_API_URL}/v1/naver/callback?code=${code}&state=${state}`, {
           withCredentials: true
         }).then( (res) => {
           if (res.data.statusCode === 200) {
