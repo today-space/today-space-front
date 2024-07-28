@@ -29,13 +29,13 @@ function Oauth() {
           }
         }).catch( (err) => {
           console.log(err);
-        })
+        });
       }
     }
 
     if (params.id === "naver") {
       if (code && state) {
-        axios.get(`${process.env.REACT_APP_API_URL}/v1/naver/callback?code=${code}&state=${state}`, {
+        axios.get(`${process.env.REACT_APP_API_URL}/v1/naver/callback?code=${code}`, {
           withCredentials: true
         }).then( (res) => {
           if (res.data.statusCode === 200) {
@@ -47,7 +47,25 @@ function Oauth() {
           }
         }).catch( (err) => {
           console.log(err);
-        })
+        });
+      }
+    }
+
+    if (params.id === "google") {
+      if (code) {
+        axios.get(`${process.env.REACT_APP_API_URL}/v1/google/callback?code=${code}`, {
+          withCredentials: true
+        }).then( (res) => {
+          if (res.data.statusCode === 200) {
+
+            localStorage.setItem("accessToken", res.headers.authorization);
+            dispatch(setIsLogin(true));
+            navigate("/");
+
+          }
+        }).catch( (err) => {
+          console.log(err);
+        });
       }
     }
 
