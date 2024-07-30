@@ -9,6 +9,9 @@ COPY package*.json ./
 # 종속성 설치
 RUN npm install
 
+# 애플리케이션 소스 코드 복사
+COPY . .
+
 # 애플리케이션 빌드
 RUN npm run build
 
