@@ -1,11 +1,9 @@
-import Topbar from "../components/common/Topbar";
-import SearchTags from '../components/post/SearchTags';
-import AddPostButton from '../components/post/AddPostButton';
-import PostItem from '../components/post/PostItem';
-import CommentSection from '../components/post/CommentSection';
-import './page.css';
+import React from 'react';
+import PostItem from "./PostItem";
+import CommentSection from "./CommentSection";
+import './post.css';
 
-const Post = () => {
+function AllPosts () {
   const posts = [
     {
       profileImage: 'https://via.placeholder.com/36',
@@ -40,30 +38,36 @@ const Post = () => {
 
   return (
       <div>
-        <Topbar/>
         <div className="container">
-          <SearchTags/>
-          <AddPostButton/>
           {posts.map((post, index) => (
               <div className="content">
-              <div className="content-wrapper" key={index}>
-                <PostItem
-                    profileImage={post.profileImage}
-                    title={post.title}
-                    postImage={post.postImage}
-                    likeCount={post.likeCount}
-                    nickname={post.nickname}
-                    content={post.content}
-                    date={post.date}
-                    tags={post.tags}
-                />
-                <CommentSection comments={post.comments}/>
-              </div>
+                <div className="content-wrapper" key={index}>
+                  <PostItem
+                      profileImage={post.profileImage}
+                      title={post.title}
+                      postImage={post.postImage}
+                      likeCount={post.likeCount}
+                      nickname={post.nickname}
+                      content={post.content}
+                      date={post.date}
+                      tags={post.tags}
+                  />
+                  <CommentSection comments={post.comments}/>
+                </div>
               </div>
           ))}
         </div>
+        <div className="pagination">
+          <a href="#" className="arrow">&lt;</a>
+          <a href="#" className="active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <a href="#" className="arrow">&gt;</a>
+        </div>
       </div>
   );
-};
+}
 
-export default Post;
+export default AllPosts;
