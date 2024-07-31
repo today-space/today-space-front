@@ -1,39 +1,22 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PostItem from './PostItem';
 import './popular.css';
+import axios from "axios";
 
 function PopularPosts () {
-  const postsData = [
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=인테리어+팁',
-      altText: '인테리어 팁',
-      title: '작은 공간 활용 인테리어 팁',
-      views: 1234,
-      comments: 56,
-    },
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=DIY+프로젝트',
-      altText: 'DIY 프로젝트',
-      title: '주말 DIY 프로젝트: 원목 선반 만들기',
-      views: 987,
-      comments: 42,
-    },
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=컬러+트렌드',
-      altText: '컬러 트렌드',
-      title: '2023년 인테리어 컬러 트렌드',
-      views: 876,
-      comments: 38,
-    },
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=식물+인테리어',
-      altText: '식물 인테리어',
-      title: '초보자를 위한 실내 식물 인테리어',
-      views: 765,
-      comments: 31,
-    },
-  ];
+  const [postData, setPostData] = useState([]);
 
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/posts?topLiked=true`)
+    .then(response => {
+      if (response.data.statusCode === 200) {
+        setPostData(response.data.data.content);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
 
   return (
       <section className="section">
@@ -42,15 +25,14 @@ function PopularPosts () {
           <a href="/post" className="section-link">더보기</a>
         </div>
         <div className="grid">
-          {postsData.map((post, index) => (
+          {postData.map((post, index) => (
               <PostItem
                   key={index}
                   postId={post.postId}
-                  imgSrc={post.imgSrc}
+                  images={post.images}
                   altText={post.altText}
-                  title={post.title}
-                  views={post.views}
-                  comments={post.comments}
+                  hashtags={post.hashtags}
+                  likeCount={post.likeCount}
               />
           ))}
         </div>
