@@ -6,8 +6,8 @@ const ProductItem = ({ imagePath, altText, title, price }) => {
       <div className="item">
         <img src={imagePath} alt={altText} />
         <div className="item-info">
-          <h3>{title}</h3>
-          <p>{price}</p>
+          <h3 className="product-title">{title}</h3>
+          <p className="product-price">{price.toLocaleString()}원</p>
         </div>
       </div>
   );
