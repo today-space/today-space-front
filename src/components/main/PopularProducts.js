@@ -1,38 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ProductItem from './ProductItem';
 import './popular.css';
 
-function PopularProducts () {
-  const productData = [
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=인테리어+팁',
-      altText: 'productData',
-      title: '작은 공간 활용 productData 팁',
-      views: 1234,
-      comments: 56,
-    },
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=DIY+프로젝트',
-      altText: 'DIY productData',
-      title: '주말 DIY 프로젝트: 원목 선반 productData',
-      views: 987,
-      comments: 42,
-    },
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=컬러+트렌드',
-      altText: '컬러 productData',
-      title: '2023년 인테리어 productData 트렌드',
-      views: 876,
-      comments: 38,
-    },
-    {
-      imgSrc: 'https://via.placeholder.com/300x180?text=식물+인테리어',
-      altText: '식물 productData',
-      title: '초보자를 위한 실내 productData 인테리어',
-      views: 765,
-      comments: 31,
-    },
-  ];
+function PopularProducts() {
+  const [productData, setProductData] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/products?topWished=true`)
+    .then(response => {
+      if (response.data.statusCode === 200) {
+        setProductData(response.data.data.content);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
 
   return (
       <section className="section">
@@ -43,12 +27,12 @@ function PopularProducts () {
         <div className="grid">
           {productData.map((product, index) => (
               <ProductItem
-                  key={product.id}
-                  imgSrc={product.imgSrc}
-                  altText={product.altText}
+                  key={index}
+                  productId={product.productId}
+                  imagePath={product.imagePath}
+                  altText={product.title}
                   title={product.title}
-                  views={product.views}
-                  comments={product.comments}
+                  price={product.price}
               />
           ))}
         </div>

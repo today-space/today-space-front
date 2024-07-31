@@ -44,7 +44,8 @@ function PopularPosts () {
         <div className="grid">
           {postsData.map((post, index) => (
               <PostItem
-                  key={post.id}
+                  key={index}
+                  postId={post.postId}
                   imgSrc={post.imgSrc}
                   altText={post.altText}
                   title={post.title}
