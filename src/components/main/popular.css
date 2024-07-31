@@ -1,3 +1,8 @@
+/* --------------------
+  popular css
+-------------------- */
+
+/* ---------- popular.js ---------- */
 .section {
   margin-bottom: 40px;
   position: relative;
@@ -17,6 +22,7 @@
   font-size: 24px;
   margin: 0;
   color: #333;
+  font-weight: 700; /* 굵게 설정 */
 }
 .section-link {
   font-size: 16px;
@@ -50,20 +56,45 @@
 .item-info {
   padding: 15px;
 }
-.item-info h3 {
-  margin: 0 0 10px 0;
-  font-size: 18px;
+
+/* ---------- ProductItem.js ---------- */
+
+.product-title {
+  font-size: 18px; /* 크기 조정 */
   color: #333;
-  line-height: 1.4;
+  margin: 0 0 10px 0;
+  font-weight: 700; /* 굵게 설정 */
 }
-.item-info p {
-  margin: 5px 0;
-  color: #666;
+
+.product-price {
+  font-size: 14px; /* 크기 조정 */
+  font-weight: 700; /* 굵게 설정 */
+  color: rgba(30, 34, 30, 0.73);
+}
+
+/* ---------- PostItem.js ---------- */
+
+.hashtags {
+  display: flex;
+  flex-wrap: wrap; /* 해시태그가 줄바꿈되도록 설정 */
+  gap: 5px; /* 해시태그 사이의 간격 */
+  margin-bottom: 10px;
+}
+.hashtag {
+  background-color: #e9ecef;
+  border-radius: 4px;
+  padding: 2px 4px;
   font-size: 14px;
+  color: #495057;
+  display: inline-block;
 }
-.item-price {
-  font-weight: bold;
-  color: #00c73c;
-  font-size: 18px;
-  margin-top: 10px;
+.likes {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #ff6b6b;
+}
+.heart-icon {
+  margin-right: 5px;
+  color: #ff0000; /* 빨간색으로 변경 */
 }
