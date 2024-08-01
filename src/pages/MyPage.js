@@ -5,6 +5,7 @@ import Topbar from "../components/common/Topbar";
 import AccessDenied from "../components/common/AccessDenied";
 import Sidebar from "../components/mypage/Sidebar";
 import Info from "../components/mypage/Info";
+import PostList from "../components/mypage/PostList";
 import "./page.css";
 
 function MyPage() {
@@ -23,6 +24,9 @@ function MyPage() {
                 <Sidebar />
                 <div className="mypage-main-container">
                   <Info />
+                  {params.id === "post" 
+                  ? <PostList />
+                  : null}
                 </div>
               </div>
             </div>
