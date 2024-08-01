@@ -6,13 +6,14 @@ import AccessDenied from "../components/common/AccessDenied";
 import Sidebar from "../components/mypage/Sidebar";
 import Info from "../components/mypage/Info";
 import PostList from "../components/mypage/PostList";
+import ProductList from "../components/mypage/ProductList";
 import "./page.css";
 
 function MyPage() {
   
   const isAuthenticated = useSelector( (state) => state.auth.isLogIn);
   const params = useParams();
-  
+
   return (
     <>
       {isAuthenticated 
@@ -26,7 +27,9 @@ function MyPage() {
                   <Info />
                   {params.id === "post" 
                   ? <PostList />
-                  : null}
+                  : params.id === "product" 
+                    ? <ProductList />
+                    : null}
                 </div>
               </div>
             </div>

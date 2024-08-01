@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import PostItem from "../main/PostItem";
+import ProductItem from "../main/ProductItem";
 import "./mypage.css";
 
-function PostList() {
-  
+function ProductList() {
+
   const [data, setData] = useState([]);
 
   useEffect( () => {
 
     const accessToken = localStorage.getItem("accessToken");
-    
-    axios.get(`${process.env.REACT_APP_API_URL}/v1/my/posts`, {
+
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/my/products`, {
       headers: {
         "Authorization": accessToken
       }
@@ -27,7 +27,7 @@ function PostList() {
         }).then( (res) => {
           if (res.data.statusCode === 200) {
 
-            axios.get(`${process.env.REACT_APP_API_URL}/v1/my/posts`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/v1/my/products`, {
               headers: {
                 "Authorization": accessToken
               }
@@ -36,7 +36,7 @@ function PostList() {
                 setData(res.data.data.content);
               }
             }).catch( (err) => {
-              console.log("게시물 목록 조회 실패: ", err);
+              console.log("상품 목록 조회 실패: ", err);
             });
 
           }
@@ -48,18 +48,18 @@ function PostList() {
     });
 
   }, []);
-  
+
   return (
     <div className="mypageList-container">
       <div className="mypageList-container-grid">
         {data.map( (el, index) => (
-          <PostItem 
+          <ProductItem 
             key={index}
-            postId={el.id}
+            productId={el.id}
             imagePath={el.imagePath}
             altText={el.imagePath}
-            hashtags={el.hashtags}
-            likeCount={el.likeCount}
+            title={el.title}
+            price={el.price}
           />
         ))}
       </div>
@@ -67,4 +67,4 @@ function PostList() {
   );
 }
 
-export default PostList;
+export default ProductList;
