@@ -1,70 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import PostItem from "./PostItem";
 import CommentSection from "./CommentSection";
 import './post.css';
 
-function AllPosts () {
-  const posts = [
-    {
-      profileImage: 'https://via.placeholder.com/36',
-      title: '우리집거실',
-      postImage: 'https://via.placeholder.com/800x500?text=우리집거실+이미지',
-      likeCount: 5,
-      nickname: '우리집거실',
-      content: '안녕하세요! 오늘은 제가 직접 인테리어를 완성해보았습니다. 3개월 동안 열심히 준비한 공간을 정리하고 이곳을 꾸며보았어요. 소파는 편안함을 위해 부드러운 소재를 선택했고, 조명은 은은한 분위기를 연출하기 위해 간접조명을 활용했어요. 식물들도 곳곳에 배치해 생기를 불어넣었습니다. 여러분의 의견이 궁금해요!',
-      date: '2024.07.24',
-      tags: ['홈스타일링', '인테리어', '거실꾸미기', '집스타그램', '홈데코'],
-      comments: [
-        {
-          avatar: 'https://via.placeholder.com/36',
-          author: '인테리어마니아',
-          text: '멋진 인테리어네요! 거실 테이블은 어디서 구입하셨나요?',
-          time: '2시간 전'
-        }
-      ]
-    },
-    {
-      profileImage: 'https://via.placeholder.com/36',
-      title: '미니멀라이프',
-      postImage: 'https://via.placeholder.com/800x500?text=미니멀+주방+이미지',
-      likeCount: 3,
-      nickname: '미니멀라이프',
-      content: '주방을 미니멀하게 꾸며봤어요. 불필요한 것들은 과감히 정리하고, 꼭 필요한 것들만 남겼습니다. 화이트 톤으로 깔끔하게 정리하니 훨씬 넓어 보이네요. 여러분의 주방은 어떤가요?',
-      date: '2024.07.23',
-      tags: ['미니멀', '주방인테리어', '화이트인테리어', '심플라이프'],
-      comments: []
+function AllPosts() {
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [page]);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts`, {
+        params: { page }
+      });
+      const data = response.data.data;
+      setPosts(data.content);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error('Error fetching posts', error);
     }
-  ];
+  };
+
+  const getPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5;
+    const halfMaxButtons = Math.floor(maxButtons / 2);
+
+    let startPage = Math.max(1, page - halfMaxButtons);
+    let endPage = Math.min(totalPages, page + halfMaxButtons);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      const diff = maxButtons - (endPage - startPage + 1);
+      startPage = Math.max(1, startPage - diff);
+      endPage = Math.min(totalPages, endPage + diff);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+          <button key={i} onClick={() => setPage(i)} className={page === i ? 'active' : ''}>
+            {i}
+          </button>
+      );
+    }
+
+    return buttons;
+  };
 
   return (
       <div>
         <div className="container">
-          {posts.map((post, index) => (
-              <div className="content">
-                <div className="content-wrapper" key={index}>
+          {posts.map((post) => (
+              <div className="content" key={post.id}>
+                <div className="content-wrapper">
                   <PostItem
-                      profileImage={post.profileImage}
-                      title={post.title}
-                      postImage={post.postImage}
+                      profileImage={post.profileImage || 'https://via.placeholder.com/36'}
+                      nickname={post.nickname || '익명'}
+                      postImage={post.images[0]?.imagePath || 'https://via.placeholder.com/800x500?text=이미지+없음'}
                       likeCount={post.likeCount}
-                      nickname={post.nickname}
                       content={post.content}
-                      date={post.date}
-                      tags={post.tags}
+                      date={new Date(post.updatedAt).toLocaleDateString()}
+                      tags={post.hashtags.map(tag => tag.hashtagName)}
                   />
-                  <CommentSection comments={post.comments}/>
+                  <CommentSection postId={post.id} />
                 </div>
               </div>
           ))}
         </div>
         <div className="pagination">
-          <a href="#" className="arrow">&lt;</a>
-          <a href="#" className="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a href="#" className="arrow">&gt;</a>
+          {getPaginationButtons()}
         </div>
       </div>
   );
