@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../redux/reducer";
+import axios from "axios";
 import Socail from "./Social";
 import "./auth.css";
-import axios from "axios";
 
 function Login() {
 
