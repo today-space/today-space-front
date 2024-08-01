@@ -1,4 +1,11 @@
 /* postCreateForm.css */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #00c73c;
+  font-size: 28px;
+}
+
 .form-group {
   margin-bottom: 25px;
 }

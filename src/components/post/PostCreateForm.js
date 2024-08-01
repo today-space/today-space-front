@@ -22,22 +22,29 @@ function PostCreateForm() {
 
   return (
       <div className="container">
-        <form method="POST" action="submit_post_action" enctype="multipart/form-data">
+        <h1>게시글 등록</h1>
+        <form method="POST" action="submit_post_action"
+              enctype="multipart/form-data">
           <div className="form-group">
             <label htmlFor="post-image">이미지</label>
             <div className="image-preview">
               {images.map((image, index) => (
                   <div key={index} className="image-container">
-                    <img src={image} alt={`preview ${index}`} />
-                    <button type="button" className="remove-button" onClick={() => removeImage(image)}>X</button>
+                    <img src={image} alt={`preview ${index}`}/>
+                    <button type="button" className="remove-button"
+                            onClick={() => removeImage(image)}>X
+                    </button>
                   </div>
               ))}
             </div>
             <div className="file-input-wrapper">
-              <button type="button" className="btn-file-input" onClick={() => document.getElementById('post-image').click()}>
+              <button type="button" className="btn-file-input"
+                      onClick={() => document.getElementById(
+                          'post-image').click()}>
                 이미지 선택
               </button>
-              <input type="file" id="post-image" name="post-image" accept="image/*" multiple onChange={handleFileChange} />
+              <input type="file" id="post-image" name="post-image"
+                     accept="image/*" multiple onChange={handleFileChange}/>
             </div>
             <small>* 최대 5장까지 등록 가능합니다.</small>
           </div>
@@ -56,7 +63,7 @@ function PostCreateForm() {
               <div className="textarea-counter">{postContent.length}/2000</div>
             </div>
             <small className="tag-help">
-              게시글에 대해 자세히 설명해주세요.<br />
+              게시글에 대해 자세히 설명해주세요.<br/>
               전화번호, SNS 계정 등 개인정보 입력은 금지될 수 있어요.
             </small>
           </div>
