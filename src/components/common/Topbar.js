@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { setIsLogin } from "../../redux/reducer";
-import { removeCookie } from "../../function";
 import "./common.css";
 
 function Topbar() {
@@ -22,7 +21,6 @@ function Topbar() {
       if (res.data.statusCode === 200) {
 
         localStorage.removeItem('accessToken');
-        removeCookie("RefreshToken");
         dispatch(setIsLogin(false));
 
       }
@@ -42,7 +40,6 @@ function Topbar() {
               if (res.data.statusCode === 200) {
 
                 localStorage.removeItem('accessToken');
-                removeCookie("RefreshToken");
                 dispatch(setIsLogin(false));
         
               }
