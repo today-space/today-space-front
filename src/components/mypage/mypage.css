@@ -1,0 +1,76 @@
+/* --------------------
+  mypage css
+-------------------- */
+
+/* ---------- Sidebar.js ---------- */
+
+.sidebar-container {
+  width: 200px;
+  padding: 20px;
+  margin-right: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sidebar-container > ul > li {
+  margin: 15px 0;
+}
+
+.sidebar-container > ul > li > a {
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.5s;
+}
+
+.sidebar-container > ul > li > a:hover, .sidebar-container > ul > li > a.active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+/* ---------- Info.js ---------- */
+
+.info-container {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-container-user {
+  display: flex;
+  align-items: center;
+}
+
+.info-container-user > img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.info-container-button {
+  display: flex;
+  gap: 15px;
+}
+
+.info-container-button > button {
+  padding: 8px 15px;
+  border: 1px solid var(--primary-color);
+  background: #fff;
+  border-radius: 4px;
+  color: var(--primary-color);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.info-container-button > button:hover {
+  border: 1px solid var(--primary-color);
+  background: var(--primary-color);
+  color: #fff;
+}

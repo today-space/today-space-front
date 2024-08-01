@@ -76,7 +76,7 @@ function Topbar() {
             <ul>
               {isAuthenticated 
               ? <>
-                  <li><Link to="/mypage/mypost">마이페이지</Link></li>
+                  <li><Link to="/mypage/post">마이페이지</Link></li>
                   <li><Link to="/" onClick={handleLogout}>로그아웃</Link></li>
                 </>
               : <>
