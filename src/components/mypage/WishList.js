@@ -29,7 +29,7 @@ function WishList() {
 
             axios.get(`${process.env.REACT_APP_API_URL}/v1/my/wishs`, {
               headers: {
-                "Authorization": accessToken
+                "Authorization": res.headers.authorization
               }
             }).then( (res) => {
               if (res.data.statusCode === 200) {
