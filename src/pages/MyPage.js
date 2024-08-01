@@ -7,6 +7,7 @@ import Sidebar from "../components/mypage/Sidebar";
 import Info from "../components/mypage/Info";
 import PostList from "../components/mypage/PostList";
 import ProductList from "../components/mypage/ProductList";
+import WishList from "../components/mypage/WishList";
 import "./page.css";
 
 function MyPage() {
@@ -29,7 +30,9 @@ function MyPage() {
                   ? <PostList />
                   : params.id === "product" 
                     ? <ProductList />
-                    : null}
+                    : params.id === "wish" 
+                      ? <WishList />
+                      : null}
                 </div>
               </div>
             </div>
