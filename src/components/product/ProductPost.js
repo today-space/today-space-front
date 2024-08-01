@@ -1,6 +1,6 @@
 import {useState} from "react";
 import axios from "axios";
-import "../pages/productpostpage.css"
+import "./productpost.css"
 
 function ProductPost () {
   const [productImage, setProductImage] = useState([]);
@@ -9,10 +9,10 @@ function ProductPost () {
   const [stateOption, setStateOption] = useState('ON_SALE');
 
   const [data, setData] = useState({
-    title: '', // 초기값을 빈 문자열로 설정
+    title: '',
     price: '',
     content: '',
-    address: '', // 초기값을 빈 문자열로 설정
+    address: '',
     state: 'ON_SALE'
   });
 
@@ -100,7 +100,7 @@ function ProductPost () {
       if (error.response) {
         alert(`Error: ${error.response.data.message}`);
       } else {
-        alert('이거 오류');
+        alert('Error');
       }
     }
   };

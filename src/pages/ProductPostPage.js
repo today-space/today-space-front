@@ -1,5 +1,6 @@
 import Topbar from "../components/common/Topbar";
-import ProductPost from "../components/ProductPost";
+import './page.css'
+import ProductPost from "../components/product/ProductPost";
 
 function ProductPostPage () {
 
