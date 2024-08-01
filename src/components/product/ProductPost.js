@@ -80,7 +80,7 @@ function ProductPost () {
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
 
     for (let i = 0; i < productImage.length; i++) {
-      formData.append('product', productImage[i]);
+      formData.append('files', productImage[i]);
     }
 
     const token = localStorage.getItem('accessToken');
