@@ -5,6 +5,8 @@ import Oauth from "./pages/Oauth";
 import "./App.css";
 import Product from "./components/Product";
 import ProductMain from "./pages/ProductMain";
+import MyPage from "./pages/MyPage";
+import NotFound from "./components/common/NotFound";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Route path="/auth/:id" element={<Auth />} />
       <Route path="/oauth/:id" element={<Oauth />} />
       <Route path="/products" element={<ProductMain />} />
+      <Route path="/mypage/:id" element={<MyPage />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
