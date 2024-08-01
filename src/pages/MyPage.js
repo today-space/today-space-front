@@ -8,6 +8,7 @@ import Info from "../components/mypage/Info";
 import PostList from "../components/mypage/PostList";
 import ProductList from "../components/mypage/ProductList";
 import WishList from "../components/mypage/WishList";
+import ReviewList from "../components/mypage/ReviewList";
 import "./page.css";
 
 function MyPage() {
@@ -32,7 +33,7 @@ function MyPage() {
                     ? <ProductList />
                     : params.id === "wish" 
                       ? <WishList />
-                      : null}
+                      : <ReviewList />}
                 </div>
               </div>
             </div>

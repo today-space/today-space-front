@@ -90,3 +90,44 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
+
+/* ---------- Review.js ---------- */
+
+.review-container {
+  border-bottom: 1px solid #dee2e6;
+  padding: 15px 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.review-container > img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.review-container-content {
+  flex-grow: 1;
+}
+
+.review-container-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.review-container-content-header-username {
+  font-weight: bold;
+}
+
+.review-container-content-header-date {
+  margin-right: 20px;
+  color: #868e96;
+  font-size: 14px;
+}
+
+.review-container-content-text {
+  margin-bottom: 10px;
+}
