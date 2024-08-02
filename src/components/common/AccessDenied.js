@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
-import { faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faExclamation } from "@fortawesome/free-solid-svg-icons";
 import "./common.css";
 
-function NotFound() {
+function AccessDenied() {
   return (
     <div>
       <div className="notfound-icon">
         <FontAwesomeIcon className="icon-size-150" icon={faCircle} />
-        <FontAwesomeIcon className="icon-size-100 notfound-icon-center" icon={faQuestion} />
+        <FontAwesomeIcon className="icon-size-100 notfound-icon-center" icon={faExclamation} />
       </div>
-      <h2 className="notfound-title">찾으시는 페이지가 없습니다</h2>
-      <p className="notfound-content">잘못된 접근이거나 요청하신 페이지를 찾을 수 없습니다<br />다시 한번 확인해주세요</p>
+      <h2 className="notfound-title">접근 불가능한 페이지입니다</h2>
+      <p className="notfound-content">해당 페이지는 로그인 후 이용하실 수 있습니다<br />로그인 후 이용해주세요</p>
       <Link to ="/">
         <button className="notfound-btn">홈으로</button>
       </Link> 
@@ -20,4 +20,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default AccessDenied;

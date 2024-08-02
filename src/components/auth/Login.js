@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../redux/reducer";
+import axios from "axios";
 import Socail from "./Social";
 import "./auth.css";
-import axios from "axios";
 
 function Login() {
 
@@ -48,6 +48,7 @@ function Login() {
       if (res.data.statusCode === 200) {
 
         localStorage.setItem("accessToken", res.headers.authorization);
+        localStorage.setItem("username", loginInfo.username);
         dispatch(setIsLogin(true));
         navigate("/");
 

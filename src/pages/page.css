@@ -2,6 +2,23 @@
   page css
 -------------------- */
 
+/* ---------- Main.js ---------- */
+
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f8f9fa;
+	color: #333;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 25px 20px;
+	padding-top: 40px; /* 헤더 높이(68px) + 여백(40px) */
+}
+
 /* ---------- Auth.js ---------- */
 
 .auth-background {
@@ -61,3 +78,16 @@
 	flex: 1;
 }
 
+
+
+/* ---------- MyPage.js ---------- */
+
+.mypage-container {
+	max-width: 1200px;
+	margin: 50px auto 0;
+	display: flex;
+}
+
+.mypage-main-container {
+	flex-grow: 1;
+}
