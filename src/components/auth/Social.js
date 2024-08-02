@@ -7,7 +7,7 @@ function Socail() {
   return (
     <div className="social-container">
       <Kakao />
-      <Naver />
+      {/* <Naver /> */}
       <Goolge />
     </div>
   );
