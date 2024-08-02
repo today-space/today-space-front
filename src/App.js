@@ -5,6 +5,7 @@ import Oauth from "./pages/Oauth";
 import "./App.css";
 import ProductPostPage from "./pages/ProductPostPage";
 import ProductMainPage from "./pages/ProductMainPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/oauth/:id" element={<Oauth />} />
       <Route path="/productpost" element={<ProductPostPage />} />
       <Route path="/product" element={<ProductMainPage />} />
+      <Route path="/product/:id" element={<ProductDetailPage />} />
     </Routes>
   );
 }
