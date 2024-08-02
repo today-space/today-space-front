@@ -52,25 +52,23 @@ function AllPosts() {
   };
 
   return (
-      <div>
-        <div className="container">
-          {posts.map((post) => (
-              <div className="content" key={post.id}>
-                <div className="content-wrapper">
-                  <PostItem
-                      profileImage={post.profileImage || 'https://via.placeholder.com/36'}
-                      nickname={post.nickname || '익명'}
-                      postImage={post.images[0]?.imagePath || 'https://via.placeholder.com/800x500?text=이미지+없음'}
-                      likeCount={post.likeCount}
-                      content={post.content}
-                      date={new Date(post.updatedAt).toLocaleDateString()}
-                      tags={post.hashtags.map(tag => tag.hashtagName)}
-                  />
-                  <CommentSection postId={post.id} />
-                </div>
+      <div className="posts-container">
+        {posts.map((post) => (
+            <div className="post-box" key={post.id}>
+              <div className="content-wrapper">
+                <PostItem
+                    profileImage={post.profileImage || 'https://via.placeholder.com/36'}
+                    nickname={post.nickname || '익명'}
+                    postImage={post.images[0]?.imagePath || 'https://via.placeholder.com/800x500?text=이미지+없음'}
+                    likeCount={post.likeCount}
+                    content={post.content}
+                    date={new Date(post.updatedAt).toLocaleDateString()}
+                    tags={post.hashtags.map(tag => tag.hashtagName)}
+                />
+                <CommentSection postId={post.id} />
               </div>
-          ))}
-        </div>
+            </div>
+        ))}
         <div className="pagination">
           {getPaginationButtons()}
         </div>

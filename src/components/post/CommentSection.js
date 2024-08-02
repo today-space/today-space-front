@@ -56,14 +56,14 @@ const CommentSection = ({ postId }) => {
           {comments.length > 0 ? (
               comments.map((comment, index) => (
                   <div key={index} className="comment">
-                    <img src="https://via.placeholder.com/36" alt="사용자 아바타" className="comment-avatar" />
+                    <img src={comment.profileImage || "https://via.placeholder.com/36"} alt="사용자 아바타" className="comment-avatar" />
                     <div className="comment-content">
                       <div className="comment-author">{comment.username}</div>
                       <div className="comment-text">{comment.content}</div>
                       <div className="comment-actions">
                         <span>답글</span>
                         <span>{new Date(comment.createdAt).toLocaleString()}</span>
-                        <span className="delete-button">삭제</span>
+                        {/*<span className="delete-button">삭제</span>*/}
                       </div>
                     </div>
                   </div>
@@ -74,17 +74,17 @@ const CommentSection = ({ postId }) => {
                 <span className="small">댓글을 남겨주세요.</span>
               </div>
           )}
-          <form className="comment-form" onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="댓글을 입력하세요..."
-                className="comment-input"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-            />
-            <button type="submit" className="comment-submit">게시</button>
-          </form>
         </div>
+        <form className="comment-form" onSubmit={handleSubmit}>
+          <input
+              type="text"
+              placeholder="댓글을 입력하세요..."
+              className="comment-input"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button type="submit" className="comment-submit">게시</button>
+        </form>
       </div>
   );
 };

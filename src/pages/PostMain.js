@@ -8,11 +8,13 @@ function PostMain () {
   return (
       <div>
         <Topbar/>
-        <div className="container">
+        <div className="search-tags-wrapper">
           <SearchTags/>
-          <AddPostButton/>
-          <AllPosts/>
         </div>
+        <div className="add-post-button-wrapper">
+          <AddPostButton/>
+        </div>
+        <AllPosts/>
       </div>
   );
 }
