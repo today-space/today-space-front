@@ -48,6 +48,7 @@ function Login() {
       if (res.data.statusCode === 200) {
 
         localStorage.setItem("accessToken", res.headers.authorization);
+        localStorage.setItem("username", loginInfo.username);
         dispatch(setIsLogin(true));
         navigate("/");
 

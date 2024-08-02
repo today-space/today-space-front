@@ -2,7 +2,7 @@ import React from 'react';
 import './popular.css'; // 스타일을 위한 CSS 파일
 import { IoMdHeart } from "react-icons/io";
 
-const PostItem = ({ imagePath, altText, hashtags, views, likeCount }) => {
+const PostItem = ({ postId, imagePath, altText, hashtags, views, likeCount }) => {
   return (
       <div className="item">
         <img src={imagePath} alt={altText} />
