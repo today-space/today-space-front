@@ -1,12 +1,14 @@
 import {useState} from "react";
 import axios from "axios";
 import "./productpost.css"
+import { useNavigate } from 'react-router-dom';
 
 function ProductPost () {
   const [productImage, setProductImage] = useState([]);
   const [imageCount, setImageCount] = useState(0);
   const [addressOption, setAddressOption] = useState('');
   const [stateOption, setStateOption] = useState('ON_SALE');
+  const navigate = useNavigate();
 
   const [data, setData] = useState({
     title: '',
@@ -95,12 +97,33 @@ function ProductPost () {
 
       if (response.status === 201) {
         alert('상품 판매글 추가 성공');
+        navigate("/product");
       }
     } catch (error) {
-      if (error.response) {
-        alert(`Error: ${error.response.data.message}`);
-      } else {
-        alert('Error');
+      if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
+        try {
+          const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+            withCredentials: true
+          });
+
+          if (refreshResponse.data.statusCode === 200) {
+            const newAccessToken = refreshResponse.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
+
+            const retryResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/products`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': newAccessToken
+              },
+            });
+
+            if (retryResponse.status === 201) {
+              alert('상품 판매글 추가 성공');
+            }
+          }
+        } catch (refreshError) {
+          console.log("토큰 재발급 실패: ", refreshError);
+        }
       }
     }
   };
