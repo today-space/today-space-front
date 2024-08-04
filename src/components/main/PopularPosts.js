@@ -36,7 +36,7 @@ function PopularPosts () {
           {postData.map((post, index) => (
               <PostItem
                   key={index}
-                  postId={post.postId}
+                  postId={post.id}
                   images={post.imagePath}
                   altText={post.altText}
                   hashtags={post.hashtags}

@@ -36,7 +36,7 @@ function PopularProducts() {
           {productData.map((product, index) => (
               <ProductItem
                   key={index}
-                  productId={product.productId}
+                  productId={product.id}
                   imagePath={product.imagePath}
                   altText={product.title}
                   title={product.title}
