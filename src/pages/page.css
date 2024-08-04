@@ -55,6 +55,31 @@ body {
   color: var(--primary-color);
 }
 
+/* ---------- PostMain.js ---------- */
+
+.container {
+	max-width: 1240px;
+	margin: 0 auto;
+
+}
+
+.content-wrapper {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+
+.left-content {
+	flex: 2;
+}
+
+.right-content {
+	flex: 1;
+}
+
+
+
 /* ---------- MyPage.js ---------- */
 
 .mypage-container {
