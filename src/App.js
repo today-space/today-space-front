@@ -8,6 +8,7 @@ import NotFound from "./components/common/NotFound";
 import ProductPostPage from "./pages/ProductPostPage";
 import ProductMainPage from "./pages/ProductMainPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import Review from "./pages/Review";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/product" element={<ProductMainPage />} />
       <Route path="/product/:id" element={<ProductDetailPage />} />
       <Route path="/mypage/:id" element={<MyPage />} />
+      <Route path="/review/:id" element={<Review />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
