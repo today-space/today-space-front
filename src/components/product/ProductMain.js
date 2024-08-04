@@ -10,8 +10,21 @@ const ProductMain = () => {
   const [regionOption, setRegionOption] = useState(undefined); // 지역 옵션 상태
   const [products, setProducts] = useState([]); // 제품 목록 상태
   const [totalPages, setTotalPages] = useState(undefined); // 총 페이지 수 상태
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setIsLoggedIn(!!token); // 토큰이 있으면 로그인 상태로 설정
+  }, []);
+
+  const handlePostProduct = () => {
+    if (isLoggedIn) {
+      navigate('/productpost');
+    } else {
+      alert("로그인 후 재시도해주세요")
+    }
+  };
 
 
   const fetchProducts = async (page, sortOption, search,
@@ -27,12 +40,18 @@ const ProductMain = () => {
             },
             withCredentials: true
           });
+
       setProducts(response.data.data.content);
       setTotalPages(response.data.data.totalPages);
       console.log('API 응답:', response.data);
+
     } catch (error) {
-      console.error('Error fetching products', error);
-      alert("존재하지 않는 검색어 입니다");
+      if (error.response && error.response.status === 400) {
+        alert("상품이 존재하지 않습니다, 첫 상품을 등록해주세요");
+      } else {
+        console.error('Error fetching products', error);
+        alert("상품을 불러오는 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -135,7 +154,9 @@ const ProductMain = () => {
           </form>
         </div>
         <div className="filter-container">
-          <Link className="post-product-button" to="/productpost">판매글 등록하기</Link>
+          <button className="post-product-button" onClick={handlePostProduct}>
+            판매글 등록하기
+          </button>
           <div className="filter-options">
             <select className="filter-select" id="sort-select"
                     onChange={handleSortChange}>
