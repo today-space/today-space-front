@@ -64,6 +64,7 @@ function AllPosts() {
                     content={post.content}
                     date={new Date(post.updatedAt).toLocaleDateString()}
                     tags={post.hashtags.map(tag => tag.hashtagName)}
+                    postId={post.id} // 추가
                 />
                 <CommentSection postId={post.id} />
               </div>

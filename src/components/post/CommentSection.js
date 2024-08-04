@@ -13,14 +13,7 @@ const CommentSection = ({ postId }) => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-      );
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`);
       setComments(response.data.data);
     } catch (error) {
       console.error('Error fetching comments', error);
@@ -30,6 +23,11 @@ const CommentSection = ({ postId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
+
+    if (!token) {
+      alert('로그인 후 댓글을 남길 수 있습니다.');
+      return;
+    }
 
     try {
       await axios.post(
@@ -56,14 +54,12 @@ const CommentSection = ({ postId }) => {
           {comments.length > 0 ? (
               comments.map((comment, index) => (
                   <div key={index} className="comment">
-                    <img src={comment.profileImage || "https://via.placeholder.com/36"} alt="사용자 아바타" className="comment-avatar" />
+                    <img src={comment.profileImage || 'https://via.placeholder.com/36'} alt="사용자 아바타" className="comment-avatar" />
                     <div className="comment-content">
                       <div className="comment-author">{comment.username}</div>
                       <div className="comment-text">{comment.content}</div>
                       <div className="comment-actions">
-                        <span>답글</span>
                         <span>{new Date(comment.createdAt).toLocaleString()}</span>
-                        {/*<span className="delete-button">삭제</span>*/}
                       </div>
                     </div>
                   </div>
@@ -78,12 +74,13 @@ const CommentSection = ({ postId }) => {
         <form className="comment-form" onSubmit={handleSubmit}>
           <input
               type="text"
-              placeholder="댓글을 입력하세요..."
+              placeholder={token ? "댓글을 입력하세요..." : "로그인 후 댓글을 남길 수 있습니다."}
               className="comment-input"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
+              disabled={!token} // 로그인 안된 상태면 입력 비활성화
           />
-          <button type="submit" className="comment-submit">게시</button>
+          <button type="submit" className="comment-submit" disabled={!token}>게시</button>
         </form>
       </div>
   );

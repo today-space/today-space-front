@@ -1,20 +1,25 @@
+import React from 'react';
 import Topbar from "../components/common/Topbar";
 import SearchTags from '../components/post/SearchTags';
 import AddPostButton from '../components/post/AddPostButton';
 import AllPosts from '../components/post/AllPosts'
 import './page.css';
 
-function PostMain () {
+function PostMain() {
+  const token = localStorage.getItem('accessToken');
+
   return (
       <div>
-        <Topbar/>
+        <Topbar />
         <div className="search-tags-wrapper">
-          <SearchTags/>
+          <SearchTags />
         </div>
-        <div className="add-post-button-wrapper">
-          <AddPostButton/>
-        </div>
-        <AllPosts/>
+        {token && (
+            <div className="add-post-button-wrapper">
+              <AddPostButton />
+            </div>
+        )}
+        <AllPosts />
       </div>
   );
 }

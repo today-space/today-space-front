@@ -289,3 +289,8 @@
 .right-content {
   flex: 1;
 }
+
+.nickname {
+  font-weight: bold;
+  margin-right: 10px;
+}
