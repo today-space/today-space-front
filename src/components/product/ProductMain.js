@@ -135,7 +135,7 @@ const ProductMain = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setPage(1); // 페이지를 1로 설정
-    fetchProducts(1, sortOption, search, regionOption); // 검색어를 포함한 검색 요청
+    fetchProducts(1, sortOption, search, regionOption); 
   };
 
   return (

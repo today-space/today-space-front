@@ -30,7 +30,7 @@ function ProductPost() {
   
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); // 수정된 부분: Array.from 사용
+    const files = Array.from(e.target.files); 
     setProductImage(files);
     setImageCount(files.length);
   };
@@ -71,7 +71,7 @@ function ProductPost() {
     try {
       let response;
       if (id) {
-        // 수정 모드
+
         response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/products/${id}`, product, {
           headers: {
             'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ function ProductPost() {
           },
         });
       } else {
-        // 등록 모드
+
         response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/products`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -90,22 +90,26 @@ function ProductPost() {
       console.log('Response:', response);
 
       if (response.status === 200 || response.status === 201) {
+        
         alert(id ? '상품 수정 성공' : '상품 등록 성공');
         navigate("/product");
       }
     } catch (error) {
       if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
         try {
+          
           const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
             withCredentials: true
           });
 
           if (refreshResponse.data.statusCode === 200) {
+            
             const newAccessToken = refreshResponse.headers.authorization;
             localStorage.setItem("accessToken", newAccessToken);
 
             let retryResponse;
             if (id) {
+              
               retryResponse = await axios.put(`${process.env.REACT_APP_API_URL}/v1/products/${id}`, product, {
                 headers: {
                   'Content-Type': 'application/json',
@@ -113,6 +117,7 @@ function ProductPost() {
                 },
               });
             } else {
+              
               retryResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/products`, formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
@@ -122,11 +127,13 @@ function ProductPost() {
             }
 
             if (retryResponse.status === 200 || retryResponse.status === 201) {
+              
               alert(id ? '상품 수정 성공' : '상품 등록 성공');
               navigate("/product");
             }
           }
         } catch (refreshError) {
+          
           console.log("토큰 재발급 실패: ", refreshError);
         }
       }

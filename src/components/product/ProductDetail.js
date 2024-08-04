@@ -23,17 +23,20 @@ function ProductDetail(){
         console.log(localStorage.getItem("username"));
         console.log(response.data.data.userName);
         if (localStorage.getItem("username") === response.data.data.userName) {
+          
           setIsCheck(true);
         }
         console.log('API 응답:', response.data);
       }
     })
     .catch(error => {
+      
       console.error('Error fetching data:', error);
     });
   }, [id]);
 
   useEffect(() => {
+    
     console.log('isCheck 상태가 변경되었습니다:', isCheck);
   }, [isCheck]);
 
@@ -42,10 +45,12 @@ function ProductDetail(){
   }
 
   const handleEditClick = () => {
+    
     navigate(`/productpost/${id}`);
   };
 
   const handlePayment= () => {
+    
     const userConfirmed = window.confirm("정말로 구매하시겠습니까?");
     if (userConfirmed) {
       alert("개발중입니다");
