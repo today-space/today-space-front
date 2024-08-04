@@ -1,0 +1,301 @@
+/* --------------------
+  post css
+-------------------- */
+
+/* ---------- SearchTags.js ---------- */
+
+.search-tags {
+  display: flex;
+  justify-content: center; /* Centering the tags */
+  gap: 10px;
+  padding: 15px 20px;
+  background-color: transparent;
+}
+.search-tags-content {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center; /* Centering the content within the container */
+}
+.search-tag {
+  background-color: #f1f3f5;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #495057;
+}
+
+/* ---------- AddPostButton.js ---------- */
+
+.add-post-button-container {
+  display: flex;
+  justify-content: flex-end; /* Aligning the button to the right */
+  max-width: 1240px;
+  margin: 0 auto;
+  background-color: transparent;
+  padding: 10px 0px;
+}
+.add-post-button {
+  background-color: #00c73c;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ---------- PostItem.js ---------- */
+
+.item {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-image {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-image {
+  width: 100%;
+  height: 500px; /* Fixed height */
+  object-fit: cover; /* Cover the entire element */
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.post-content {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.post-date {
+  font-size: 12px;
+  color: #868e96;
+  margin-bottom: 10px;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tag {
+  background-color: #f1f3f5;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-button {
+  background-color: #00c73c;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ---------- CommentSection.js ---------- */
+
+.right-content {
+  width: 100%;
+  padding: 20px;
+  border-left: 1px solid #e9ecef;
+}
+
+.comments-section {
+  margin-top: 20px;
+  max-height: 550px; /* Fixed height */
+  overflow-y: auto; /* Scrollable content */
+}
+
+.comment {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.comment-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.comment-content {
+  flex-grow: 1;
+}
+
+.comment-author {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  margin-bottom: 5px;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  color: #868e96;
+}
+
+.comment-actions .delete-button {
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.comment-form {
+  display: flex;
+  margin-top: 20px;
+}
+
+.comment-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.comment-submit {
+  background-color: #00c73c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.no-comments {
+  font-size: 18px;
+  color: #868e96;
+  text-align: center;
+  padding: 20px;
+}
+
+.no-comments .small {
+  font-size: 12px;
+}
+
+/* ---------- pagination ---------- */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.pagination button {
+  color: #333;
+  padding: 8px 16px;
+  margin: 0 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: #ddd;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.pagination button.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ---------- AllPosts.js ---------- */
+
+.posts-container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.post-box {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.left-content {
+  flex: 2;
+}
+
+.right-content {
+  flex: 1;
+}
+
+.nickname {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/*.tag {
+  cursor: pointer;
+  color: blue; !* 클릭 가능성을 강조하기 위해 색상을 변경합니다. *!
+}*/

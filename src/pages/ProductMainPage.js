@@ -1,7 +1,8 @@
-import Product from "../components/Product";
 import Topbar from "../components/common/Topbar";
+import './page.css'
+import ProductMain from "../components/product/ProductMain";
 
-function ProductMain() {
+function ProductMainPage() {
 
   return (
       <div>
@@ -9,11 +10,11 @@ function ProductMain() {
           <Topbar />
         </div>
         <div>
-          <Product />
+          <ProductMain />
         </div>
       </div>
 )
   ;
 }
 
-export default ProductMain;
+export default ProductMainPage;
