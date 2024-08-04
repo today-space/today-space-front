@@ -11,6 +11,7 @@ import ProductPostPage from "./pages/ProductPostPage";
 import ProductMainPage from "./pages/ProductMainPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import Review from "./pages/Review";
+import PostDetailPage from "./pages/PostDetailPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/oauth/:id" element={<Oauth />} />
       <Route path="/post/create" element={<PostCreate />} />
       <Route path="/post" element={<PostMain />} />
+      <Route path="/post/:id" element={<PostDetailPage />} />
       <Route path="/productpost" element={<ProductPostPage />} />
       <Route path="/productpost/:id" element={<ProductPostPage />} />
       <Route path="/product" element={<ProductMainPage />} />
