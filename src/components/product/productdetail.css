@@ -89,6 +89,9 @@ body {
   gap: 10px;
   margin-bottom: 20px;
 }
+.seller-info > img {
+  cursor: pointer;
+}
 .seller-avatar {
   width: 40px;
   height: 40px;
@@ -98,6 +101,7 @@ body {
 .seller-details {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 .seller-name {
   font-weight: bold;

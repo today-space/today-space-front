@@ -1,15 +1,17 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate } from "react-router-dom";
 import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
+import { useNavigate } from 'react-router-dom';
 
 function ProductDetail(){
 
   const [productData, setProductData] = useState(null);
   const [isCheck, setIsCheck] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/v1/products/${id}`, {
@@ -21,24 +23,48 @@ function ProductDetail(){
         console.log(localStorage.getItem("username"));
         console.log(response.data.data.userName);
         if (localStorage.getItem("username") === response.data.data.userName) {
+          
           setIsCheck(true);
         }
         console.log('API 응답:', response.data);
       }
     })
     .catch(error => {
+      
       console.error('Error fetching data:', error);
     });
   }, [id]);
 
   useEffect(() => {
+    
     console.log('isCheck 상태가 변경되었습니다:', isCheck);
   }, [isCheck]);
+
+  const handleNavigate = () => {
+    navigate(`/review/${productData.userName}`);
+  };
 
   if (!productData) {
     return <p>Loading...</p>;
   }
 
+  const handleEditClick = () => {
+    
+    navigate(`/productpost/${id}`);
+  };
+
+  const handlePayment= () => {
+    
+    const userConfirmed = window.confirm("정말로 구매하시겠습니까?");
+    if (userConfirmed) {
+      alert("개발중입니다");
+    }
+  };
+
+  const handleChats= () => {
+    
+      alert("개발중입니다");
+  };
 
   return (
       <div className="container">
@@ -63,17 +89,22 @@ function ProductDetail(){
             <div className="edit-delete">
               {isCheck ?
                   <>
-                  <button className="edit-btn" id="editBtn">편집</button>
-                  <Delete id={id}/>
+                    <button className="edit-btn" id="editBtn"
+                            onClick={handleEditClick}>편집
+                    </button>
+                    <Delete id={id}/>
                   </>
-                : null}
+                  : null}
             </div>
           </div>
         </div>
         <div className="seller-info">
-          <img src="" alt="판매자 프로필"
-               className="seller-avatar"/>
-          <div className="seller-details">
+          {productData.userImagePath 
+          ? <img src={`https://today-space.s3.ap-northeast-2.amazonaws.com/${productData.userImagePath}`} alt="판매자 프로필"
+          className="seller-avatar" onClick={handleNavigate} />
+          : <img src="/defaultProfileImg.png" alt="판매자 프로필"
+          className="seller-avatar" onClick={handleNavigate} />}
+          <div className="seller-details" onClick={handleNavigate}>
             <span className="seller-name">{productData.userName}</span>
             <span className="seller-meta">{new Date(
                 productData.upDateAt).toLocaleDateString()}</span>
@@ -83,14 +114,13 @@ function ProductDetail(){
           {productData.content}
         </p>
         <p className="product-price">{productData.price}</p>
-        <button className="btn btn-primary" id="purchaseBtn">구매하기</button>
-
+        <button className="btn btn-primary" id="purchaseBtn" onClick={handlePayment}>구매하기</button>
         <div className="action-buttons">
-          <Wish id={id} />
-          <button className="btn btn-secondary" id="chatBtn">채팅하기</button>
+          <Wish id={id}/>
+          <button className="btn btn-secondary" id="chatBtn" onClick={handleChats}>채팅하기</button>
         </div>
       </div>
   );
-    }
+}
 
 export default ProductDetail;

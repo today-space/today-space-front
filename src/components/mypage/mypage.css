@@ -55,6 +55,10 @@
   object-fit: cover;
 }
 
+.info-container-user > div {
+  font-weight: bold;
+}
+
 .info-container-button {
   display: flex;
   gap: 15px;
@@ -130,4 +134,140 @@
 
 .review-container-content-text {
   margin-bottom: 10px;
+}
+
+/* ---------- Profile.js ---------- */
+
+.profile-container {
+  max-width: 720px;
+  margin: 50px auto 50px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.profile-container > h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-color);
+  font-size: 28px;
+}
+
+.profile-container-image {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-container-image > img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-container-form {
+  margin-bottom: 25px;
+}
+
+.profile-container-form > label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #495057;
+  font-size: 18px;
+}
+
+.profile-container-form > input[type="password"] {
+  width: calc(100% - 24px);
+  padding: 12px 14px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.profile-container-form > input[type="password"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,199,60,0.2);
+}
+
+.profile-container-form-username {
+  width: calc(80% - 24px);
+  padding: 12px 14px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.profile-container-form-username:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,199,60,0.2);
+}
+
+.profile-container-form-username-button {
+  width: 100px;
+  height: 42px;
+  margin-left: 20px;
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+	background: #fff;
+	padding: 3px 12px 5px 12px;
+	color: var(--primary-color);
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.profile-container-form-username-button:hover {
+  background: var(--primary-color);
+	color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 199, 60, 0.3);
+}
+
+.profile-container-message {
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.profile-container-button {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 35px;
+}
+
+.profile-container-button > button {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.profile-container-button-submit {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.profile-container-button-submit:hover {
+  border: 1px solid var(--primary-color);
+  background: #fff;
+  color: var(--primary-color);
+}
+
+.profile-container-button-cancle {
+  background-color: #f1f3f5;
+  color: #495057;
+}
+
+.profile-container-button-cancle:hover {
+  border: 1px solid var(--primary-color);
+  background: #fff;
+  color: var(--primary-color);
 }

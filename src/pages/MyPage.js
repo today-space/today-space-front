@@ -9,6 +9,7 @@ import PostList from "../components/mypage/PostList";
 import ProductList from "../components/mypage/ProductList";
 import WishList from "../components/mypage/WishList";
 import ReviewList from "../components/mypage/ReviewList";
+import Profile from "../components/mypage/Profile";
 import "./page.css";
 
 function MyPage() {
@@ -40,6 +41,7 @@ function MyPage() {
           : params.id === "modify" 
             ? <div>
                 <Topbar />
+                <Profile />
               </div>
             : <NotFound />}
         </>
