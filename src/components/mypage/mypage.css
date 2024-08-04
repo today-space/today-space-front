@@ -55,6 +55,10 @@
   object-fit: cover;
 }
 
+.info-container-user > div {
+  font-weight: bold;
+}
+
 .info-container-button {
   display: flex;
   gap: 15px;
