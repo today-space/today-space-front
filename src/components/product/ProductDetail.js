@@ -4,7 +4,6 @@ import {useParams, useNavigate } from "react-router-dom";
 import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
-import { useNavigate } from 'react-router-dom';
 
 function ProductDetail(){
 
