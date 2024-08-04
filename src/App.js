@@ -10,6 +10,7 @@ import NotFound from "./components/common/NotFound";
 import ProductPostPage from "./pages/ProductPostPage";
 import ProductMainPage from "./pages/ProductMainPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import PostDetailPage from "./pages/PostDetailPage"
 import Review from "./pages/Review";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Route path="/productpost/:id" element={<ProductPostPage />} />
       <Route path="/product" element={<ProductMainPage />} />
       <Route path="/product/:id" element={<ProductDetailPage />} />
+      <Route path="/post/:id" element={<PostDetailPage />} />
       <Route path="/mypage/:id" element={<MyPage />} />
       <Route path="/review/:id" element={<Review />} />
       <Route path="*" element={<NotFound />} />
