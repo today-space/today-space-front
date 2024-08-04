@@ -16,6 +16,7 @@ function App() {
       <Route path="/auth/:id" element={<Auth />} />
       <Route path="/oauth/:id" element={<Oauth />} />
       <Route path="/productpost" element={<ProductPostPage />} />
+      <Route path="/productpost/:id" element={<ProductPostPage />} />
       <Route path="/product" element={<ProductMainPage />} />
       <Route path="/product/:id" element={<ProductDetailPage />} />
       <Route path="/mypage/:id" element={<MyPage />} />

@@ -51,7 +51,6 @@ function Delete({ id }){
 
       }
     });
-
   }
   
   return(
