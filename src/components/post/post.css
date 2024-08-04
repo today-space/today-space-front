@@ -294,3 +294,8 @@
   font-weight: bold;
   margin-right: 10px;
 }
+
+/*.tag {
+  cursor: pointer;
+  color: blue; !* 클릭 가능성을 강조하기 위해 색상을 변경합니다. *!
+}*/

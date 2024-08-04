@@ -4,19 +4,19 @@ import PostItem from "./PostItem";
 import CommentSection from "./CommentSection";
 import './post.css';
 
-function AllPosts() {
+function AllPosts({ selectedTag, onTagClick }) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchPosts();
-  }, [page]);
+  }, [page, selectedTag]);
 
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts`, {
-        params: { page }
+        params: { page, hashtag: selectedTag }
       });
       const data = response.data.data;
       setPosts(data.content);
@@ -64,7 +64,8 @@ function AllPosts() {
                     content={post.content}
                     date={new Date(post.updatedAt).toLocaleDateString()}
                     tags={post.hashtags.map(tag => tag.hashtagName)}
-                    postId={post.id} // 추가
+                    postId={post.id}
+                    onTagClick={onTagClick}
                 />
                 <CommentSection postId={post.id} />
               </div>

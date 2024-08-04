@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './post.css';
 
-const SearchTags = () => {
+const SearchTags = ({ onTagClick }) => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const SearchTags = () => {
       <div className="search-tags">
         <div className="search-tags-content">
           {tags.map((tag, index) => (
-              <span key={index} className="search-tag">#{tag}</span>
+              <span key={index} className="search-tag" onClick={() => onTagClick(tag)} style={{ cursor: 'pointer' }}>#{tag}</span>
           ))}
         </div>
       </div>
