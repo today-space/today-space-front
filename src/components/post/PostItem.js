@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './post.css';
 
 const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date, tags, postId, onTagClick }) => {
@@ -7,6 +8,7 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
   const [likes, setLikes] = useState(likeCount);
   const token = localStorage.getItem('accessToken');
   const currentUsername = localStorage.getItem('username'); // localStorage에서 현재 사용자의 username을 가져옴
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkIfLiked();
@@ -46,6 +48,10 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
     }
   };
 
+  const handleEditClick = () => {
+    navigate(`/post/edit/${postId}`);
+  };
+
   return (
       <div className="left-content">
         <div className="post-header">
@@ -53,7 +59,7 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
             <img src={profileImage || 'https://via.placeholder.com/36'} alt="프로필 이미지" className="profile-image" />
             {nickname}
           </div>
-          {currentUsername === nickname && <button className="edit-button">편집</button>}
+          {currentUsername === nickname && <button className="edit-button" onClick={handleEditClick}>편집</button>}
         </div>
 
         <img src={postImage} alt="포스트 이미지" className="post-image" />
