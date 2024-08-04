@@ -13,7 +13,7 @@ function App() {
       <Route path="/auth/:id" element={<Auth />} />
       <Route path="/oauth/:id" element={<Oauth />} />
       <Route path="/products" element={<ProductMain />} />
-      <Route path="/post/edit/:id" element={<PostEdit />} />
+      <Route path="/post/edit/:postId" element={<PostEdit />} />
     </Routes>
   );
 }

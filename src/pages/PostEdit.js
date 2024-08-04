@@ -1,3 +1,4 @@
+import React from 'react';
 import Topbar from "../components/common/Topbar";
 import './page.css';
 import PostEditForm from "../components/post/PostEditForm";
