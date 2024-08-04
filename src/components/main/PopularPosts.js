@@ -29,7 +29,7 @@ function PopularPosts () {
               <PostItem
                   key={index}
                   postId={post.postId}
-                  images={post.images}
+                  images={post.imagePath}
                   altText={post.altText}
                   hashtags={post.hashtags}
                   likeCount={post.likeCount}

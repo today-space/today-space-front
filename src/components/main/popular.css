@@ -43,6 +43,7 @@
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
 .item:hover {
   transform: translateY(-3px);
