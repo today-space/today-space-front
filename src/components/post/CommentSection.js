@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './post.css';
 
 const CommentSection = ({ postId }) => {
@@ -8,8 +8,10 @@ const CommentSection = ({ postId }) => {
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    fetchComments();
-  }, []);
+    if (postId) {
+      fetchComments();
+    }
+  }, [postId]);
 
   const fetchComments = async () => {
     try {
@@ -52,18 +54,24 @@ const CommentSection = ({ postId }) => {
         <h2>댓글</h2>
         <div className="comments-section">
           {comments.length > 0 ? (
-              comments.map((comment, index) => (
-                  <div key={index} className="comment">
-                    <img src={comment.profileImage || 'https://via.placeholder.com/36'} alt="사용자 아바타" className="comment-avatar" />
-                    <div className="comment-content">
-                      <div className="comment-author">{comment.username}</div>
-                      <div className="comment-text">{comment.content}</div>
-                      <div className="comment-actions">
-                        <span>{new Date(comment.createdAt).toLocaleString()}</span>
+              comments.map((comment, index) => {
+                const profileImageUrl = comment.profileImage
+                    ? `https://today-space.s3.ap-northeast-2.amazonaws.com/${comment.profileImage}`
+                    : 'https://via.placeholder.com/36';
+
+                return (
+                    <div key={index} className="comment">
+                      <img src={profileImageUrl} alt="사용자 아바타" className="comment-avatar" />
+                      <div className="comment-content">
+                        <div className="comment-author">{comment.username}</div>
+                        <div className="comment-text">{comment.content}</div>
+                        <div className="comment-actions">
+                          <span>{new Date(comment.createdAt).toLocaleString()}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-              ))
+                );
+              })
           ) : (
               <div className="no-comments">
                 댓글이 아직 없습니다.<br />

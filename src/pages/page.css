@@ -76,9 +76,8 @@ body {
 /* ---------- PostMain.js ---------- */
 
 .container {
-	max-width: 1240px;
+	max-width: 1255px;
 	margin: 0 auto;
-
 }
 
 .content-wrapper {
