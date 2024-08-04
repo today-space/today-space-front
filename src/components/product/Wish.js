@@ -45,6 +45,11 @@ function Wish({id}) {
               if (res.data.statusCode === 200) {
                 localStorage.setItem("accessToken", newAccessToken);
                 setIsWished(!isWished);
+                if (isWished === false) {
+                  alert('찜하기 성공');
+                } else {
+                  alert('취소 성공');
+                }
                 console.log('API 응답:', res.data);
               }
             }).catch((err) => {
