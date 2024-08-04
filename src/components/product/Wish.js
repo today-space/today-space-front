@@ -10,6 +10,11 @@ function Wish({id}) {
 
     const accessToken = localStorage.getItem('accessToken');
 
+    if (!accessToken) {
+      alert('로그인 후 찜할 수 있습니다.');
+      return;
+    }
+
     axios.post(`${process.env.REACT_APP_API_URL}/v1/products/${id}/wish`, {}, {
       headers: {
         "Authorization": accessToken
