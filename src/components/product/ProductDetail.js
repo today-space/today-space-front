@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate } from "react-router-dom";
 import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
@@ -10,6 +10,7 @@ function ProductDetail(){
   const [productData, setProductData] = useState(null);
   const [isCheck, setIsCheck] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/v1/products/${id}`, {
@@ -34,6 +35,10 @@ function ProductDetail(){
   useEffect(() => {
     console.log('isCheck 상태가 변경되었습니다:', isCheck);
   }, [isCheck]);
+
+  const handleNavigate = () => {
+    navigate(`/review/${productData.userName}`);
+  };
 
   if (!productData) {
     return <p>Loading...</p>;
@@ -71,9 +76,12 @@ function ProductDetail(){
           </div>
         </div>
         <div className="seller-info">
-          <img src="" alt="판매자 프로필"
-               className="seller-avatar"/>
-          <div className="seller-details">
+          {productData.userImagePath 
+          ? <img src={`https://today-space.s3.ap-northeast-2.amazonaws.com/${productData.userImagePath}`} alt="판매자 프로필"
+          className="seller-avatar" onClick={handleNavigate} />
+          : <img src="/defaultProfileImg.png" alt="판매자 프로필"
+          className="seller-avatar" onClick={handleNavigate} />}
+          <div className="seller-details" onClick={handleNavigate}>
             <span className="seller-name">{productData.userName}</span>
             <span className="seller-meta">{new Date(
                 productData.upDateAt).toLocaleDateString()}</span>
