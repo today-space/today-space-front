@@ -1,29 +1,33 @@
 import {useEffect, useState} from "react";
-import {setIsLogin} from "../redux/reducer";
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
-import "../pages/productmain.css";
+import "./productmain.css";
 
-// 접속시 보여주는 첫 화면 : /v1/products
-// 드롭박스에서 가격 변경 했을 시 보여주는 화면 : /v1/products?page=${page}&sort=${sortOption}
-// 드롭박스에서 가격 + 지역 변경 했을시 보여주는 화면 : /v1/products?page=${page}&sort=${sortOption}&region=${regionOption}
-// 검색 했을시 기본 이동되는 화면 : ${process.env.REACT_APP_API_URL}/v1/products?page=${page}&search=${searchOption}
-// 검색하고 기본 이동에서 가격 변경했을 시의 화면 : ${process.env.REACT_APP_API_URL}/v1/products?page=${page}&sort=${sortOption}&search=${searchOption}
-// 검색하고 기본 이동 가격변동 + 지역 변경 : ${process.env.REACT_APP_API_URL}/v1/products?page=${page}&sort=${sortOption}&search=${searchOption}&region=${regionOption}
-
-const Product = () => {
+const ProductMain = () => {
   const [page, setPage] = useState(1); // 페이지 상태
   const [sortOption, setSortOption] = useState(undefined); // 정렬 옵션 상태
   const [search, setSearch] = useState(undefined); // 검색어 상태
   const [regionOption, setRegionOption] = useState(undefined); // 지역 옵션 상태
   const [products, setProducts] = useState([]); // 제품 목록 상태
   const [totalPages, setTotalPages] = useState(undefined); // 총 페이지 수 상태
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('accessToken');
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setIsLoggedIn(!!token); // 토큰이 있으면 로그인 상태로 설정
+  }, []);
 
-  const fetchProducts = async (token, page, sortOption, search,
+  const handlePostProduct = () => {
+    if (isLoggedIn) {
+      navigate('/productpost');
+    } else {
+      alert("로그인 후 재시도해주세요")
+    }
+  };
+
+
+  const fetchProducts = async (page, sortOption, search,
       regionOption) => {
     try {
       const response = await axios.get(
@@ -34,31 +38,32 @@ const Product = () => {
               search: search,
               region: regionOption
             },
-            headers: {
-              Authorization: token,
-            },
             withCredentials: true
           });
+
       setProducts(response.data.data.content);
       setTotalPages(response.data.data.totalPages);
       console.log('API 응답:', response.data);
+
     } catch (error) {
-      console.error('Error fetching products', error);
+      if (error.response && error.response.status === 400) {
+        alert("상품이 존재하지 않습니다, 첫 상품을 등록해주세요");
+      } else {
+        console.error('Error fetching products', error);
+        alert("상품을 불러오는 중 오류가 발생했습니다.");
+      }
     }
   };
 
 
   useEffect(() => {
 
-    setIsLogin(token);
+    fetchProducts(page, sortOption, search, regionOption);
+  }, [page, sortOption, regionOption]);
 
-    if (token) {
-      fetchProducts(token, page, sortOption, search, regionOption);
-    }
-  }, [token, page, sortOption, regionOption]);
 
   const handlePostClick = (id) => {
-    navigate(`/products/${id}`);
+    navigate(`/product/${id}`);
   };
 
   const getPaginationButtons = () => {
@@ -130,7 +135,7 @@ const Product = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setPage(1); // 페이지를 1로 설정
-    fetchProducts(token, 1, sortOption, search, regionOption); // 검색어를 포함한 검색 요청
+    fetchProducts(1, sortOption, search, regionOption); 
   };
 
   return (
@@ -149,7 +154,9 @@ const Product = () => {
           </form>
         </div>
         <div className="filter-container">
-          <Link className="post-product-button" to="/">판매글 등록하기</Link>
+          <button className="post-product-button" onClick={handlePostProduct}>
+            판매글 등록하기
+          </button>
           <div className="filter-options">
             <select className="filter-select" id="sort-select"
                     onChange={handleSortChange}>
@@ -186,13 +193,11 @@ const Product = () => {
           ))}
         </div>
         <div className="pagination">
-          <button>
             {getPaginationButtons()}
-          </button>
         </div>
       </div>
   );
 }
 
-export default Product;
+export default ProductMain;
 

@@ -1,9 +1,17 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import './popular.css'; // 스타일을 위한 CSS 파일
 
-const ProductItem = ({ imagePath, altText, title, price }) => {
+const ProductItem = ({ productId, imagePath, altText, title, price }) => {
+  
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(`/product/${productId}`);
+  };
+  
   return (
-      <div className="item">
+      <div className="item" onClick={handleNavigate}>
         <img src={imagePath} alt={altText} />
         <div className="item-info">
           <h3 className="product-title">{title}</h3>
