@@ -81,7 +81,7 @@ function PostEditForm() {
 
       if (response.status === 200) {
         alert("게시글이 성공적으로 수정되었습니다.");
-        navigate("/posts");
+        navigate("/post");
       } else {
         alert("게시글 수정에 실패했습니다.");
       }
@@ -103,7 +103,7 @@ function PostEditForm() {
 
       if (response.status === 200) {
         alert("게시글이 성공적으로 삭제되었습니다.");
-        navigate("/posts");
+        navigate("/post");
       } else {
         alert("게시글 삭제에 실패했습니다.");
       }
@@ -182,7 +182,7 @@ function PostEditForm() {
 
           <div className="form-actions">
             <button type="submit" className="submit-button">수정</button>
-            <button type="button" className="cancel-button" onClick={() => navigate("/posts")}>취소</button>
+            <button type="button" className="cancel-button" onClick={() => navigate("/post")}>취소</button>
             <button type="button" className="delete-button" onClick={handleDelete}>삭제</button>
           </div>
         </form>
