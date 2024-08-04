@@ -57,6 +57,11 @@ function ProductDetail(){
     }
   };
 
+  const handleChats= () => {
+    
+      alert("개발중입니다");
+  };
+
   return (
       <div className="container">
         <div className="product-images">
@@ -105,7 +110,7 @@ function ProductDetail(){
         <button className="btn btn-primary" id="purchaseBtn" onClick={handlePayment}>구매하기</button>
         <div className="action-buttons">
           <Wish id={id}/>
-          <button className="btn btn-secondary" id="chatBtn">채팅하기</button>
+          <button className="btn btn-secondary" id="chatBtn" onClick={handleChats}>채팅하기</button>
         </div>
       </div>
   );
