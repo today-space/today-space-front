@@ -32,6 +32,7 @@ const ProductMain = () => {
       console.log('API 응답:', response.data);
     } catch (error) {
       console.error('Error fetching products', error);
+      alert("존재하지 않는 검색어 입니다");
     }
   };
 
@@ -41,8 +42,9 @@ const ProductMain = () => {
     fetchProducts(page, sortOption, search, regionOption);
   }, [page, sortOption, regionOption]);
 
+
   const handlePostClick = (id) => {
-    navigate(`/products/${id}`);
+    navigate(`/product/${id}`);
   };
 
   const getPaginationButtons = () => {
@@ -133,7 +135,7 @@ const ProductMain = () => {
           </form>
         </div>
         <div className="filter-container">
-          <Link className="post-product-button" to="/">판매글 등록하기</Link>
+          <Link className="post-product-button" to="/productpost">판매글 등록하기</Link>
           <div className="filter-options">
             <select className="filter-select" id="sort-select"
                     onChange={handleSortChange}>
@@ -170,9 +172,7 @@ const ProductMain = () => {
           ))}
         </div>
         <div className="pagination">
-          <button>
             {getPaginationButtons()}
-          </button>
         </div>
       </div>
   );
