@@ -4,6 +4,7 @@ import Auth from "./pages/Auth";
 import Oauth from "./pages/Oauth";
 import PostMain from "./pages/PostMain";
 import "./App.css";
+import PostCreate from "./pages/PostCreate";
 import MyPage from "./pages/MyPage";
 import NotFound from "./components/common/NotFound";
 import ProductPostPage from "./pages/ProductPostPage";
@@ -17,6 +18,7 @@ function App() {
       <Route path="/" element={<Main />} />
       <Route path="/auth/:id" element={<Auth />} />
       <Route path="/oauth/:id" element={<Oauth />} />
+      <Route path="/post/create" element={<PostCreate />} />
       <Route path="/post" element={<PostMain />} />
       <Route path="/productpost" element={<ProductPostPage />} />
       <Route path="/productpost/:id" element={<ProductPostPage />} />
