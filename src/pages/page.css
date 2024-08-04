@@ -60,6 +60,8 @@ body {
 .post-edit-container {
 	max-width: 720px;
 	margin: 90px auto 50px;
+}
+
 /* ---------- PostCreate.js ---------- */
 
 .post-create-container {
