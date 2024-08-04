@@ -4,13 +4,12 @@ import Auth from "./pages/Auth";
 import Oauth from "./pages/Oauth";
 import PostMain from "./pages/PostMain";
 import "./App.css";
-import ProductMain from "./pages/ProductMain";
+import ProductMainPage from "./pages/ProductMainPage";
 import PostEdit from "./pages/PostEdit";
 import PostCreate from "./pages/PostCreate";
 import MyPage from "./pages/MyPage";
 import NotFound from "./components/common/NotFound";
 import ProductPostPage from "./pages/ProductPostPage";
-import ProductMainPage from "./pages/ProductMainPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PostDetailPage from "./pages/PostDetailPage"
 import Review from "./pages/Review";
@@ -21,7 +20,7 @@ function App() {
       <Route path="/" element={<Main />} />
       <Route path="/auth/:id" element={<Auth />} />
       <Route path="/oauth/:id" element={<Oauth />} />
-      <Route path="/products" element={<ProductMain />} />
+      <Route path="/products" element={<ProductMainPage />} />
       <Route path="/post/edit/:postId" element={<PostEdit />} />
       <Route path="/post/create" element={<PostCreate />} />
       <Route path="/post" element={<PostMain />} />
