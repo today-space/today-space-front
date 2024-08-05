@@ -37,7 +37,7 @@ function PopularPosts () {
               <PostItem
                   key={index}
                   postId={post.id}
-                  images={post.imagePath}
+                  imagePath={post.images[0]?.imagePath || 'https://via.placeholder.com/800x500?text=이미지+없음'}
                   altText={post.altText}
                   hashtags={post.hashtags}
                   likeCount={post.likeCount}

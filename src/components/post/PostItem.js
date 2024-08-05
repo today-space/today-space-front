@@ -9,10 +9,12 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
   const token = localStorage.getItem('accessToken');
   const currentUsername = localStorage.getItem('username'); // localStorage에서 현재 사용자의 username을 가져옴
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-    checkIfLiked();
-  }, []);
+    if (postId) {
+      checkIfLiked();
+    }
+  }, [postId]);
 
   const checkIfLiked = async () => {
     if (!token) return;
@@ -52,11 +54,13 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
     navigate(`/post/edit/${postId}`);
   };
 
+  const fullProfileImageUrl = profileImage ? `https://today-space.s3.ap-northeast-2.amazonaws.com/${profileImage}` : 'https://via.placeholder.com/36';
+
   return (
       <div className="left-content">
         <div className="post-header">
           <div className="post-title">
-            <img src={profileImage || 'https://via.placeholder.com/36'} alt="프로필 이미지" className="profile-image" />
+            <img src={fullProfileImageUrl} alt="프로필 이미지" className="profile-image" />
             {nickname}
           </div>
           {currentUsername === nickname && <button className="edit-button" onClick={handleEditClick}>편집</button>}

@@ -22,8 +22,13 @@ function PostEditForm() {
   }, [postId]);
 
   const fetchPostData = async () => {
+    const token = localStorage.getItem('accessToken');  // 토큰 가져오기
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, {
+        headers: {
+          'Authorization': token  // Authorization 헤더 추가
+        }
+      });
       const data = response.data.data;
       console.log(data);  // 데이터 확인을 위한 로그 출력
 
@@ -69,13 +74,13 @@ function PostEditForm() {
       formData.append(`files[${index}]`, file);
     });
 
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken');  // 토큰 가져오기
 
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': token
+          'Authorization': token  // Authorization 헤더 추가
         },
       });
 
@@ -92,12 +97,12 @@ function PostEditForm() {
   };
 
   const handleDelete = async () => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken');  // 토큰 가져오기
 
     try {
       const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, {
         headers: {
-          'Authorization': token
+          'Authorization': token  // Authorization 헤더 추가
         },
       });
 
