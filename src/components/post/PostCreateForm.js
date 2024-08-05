@@ -64,7 +64,7 @@ function PostCreateForm() {
 
       if (response.status === 201) {
         alert("게시글이 성공적으로 등록되었습니다.");
-        navigate("/posts");
+        navigate("/post");
       } else {
         alert("게시글 등록에 실패했습니다.");
       }

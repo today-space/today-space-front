@@ -142,7 +142,7 @@ function ProductPost() {
 
 
   return (
-      <div className="container">
+      <div className="productpost-container">
         <h1>{id ? '상품 판매글 수정' : '상품 판매글 등록'}</h1>
         <form onSubmit={handleSubmit} method="POST"
               encType="multipart/form-data">
