@@ -4,7 +4,7 @@ import "./productpost.css";
 import { useNavigate, useParams } from 'react-router-dom';
 
 function ProductPost() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [productImage, setProductImage] = useState([]);
   const [productContent, setproductContent] = useState('');
   const [images, setImages] = useState([]);
@@ -24,23 +24,30 @@ function ProductPost() {
       axios.get(`${process.env.REACT_APP_API_URL}/v1/products/${id}`)
       .then(response => {
         setProduct(response.data.data);
+        setProductImage(response.data.data.images || []);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
     }
   }, [id]);
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const newImages = files.map(file => URL.createObjectURL(file));
+    setProductImage(prevImages => [...prevImages, ...newImages]);
+    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+  };
+
+  const removeImage = (url) => {
+    const index = productImage.indexOf(url);
+    if (index > -1) {
+      const updatedImages = productImage.filter(image => image !== url);
+      setProductImage(updatedImages);
+      setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+    }
+  };
   
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); 
-    setProductImage(files);
-    setImageCount(files.length);
-  };
-
-  const handleContentChange = (event) => {
-    setproductContent(event.target.value);
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,6 +68,11 @@ function ProductPost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (selectedFiles.length > 5) {
+      alert("이미지는 최대 5장까지 업로드할 수 있습니다.");
+      return;
+    }
+
     if (!id && productImage.length === 0) {
       alert("사진을 등록해주세요.");
       return;
@@ -69,9 +81,9 @@ function ProductPost() {
     const formData = new FormData();
     formData.append('data', new Blob([JSON.stringify(product)], { type: 'application/json' }));
 
-    for (let i = 0; i < productImage.length; i++) {
-      formData.append('files', productImage[i]);
-    }
+    selectedFiles.forEach(file => {
+      formData.append('files', file);
+    });
 
     const token = localStorage.getItem('accessToken');
 
@@ -232,49 +244,47 @@ function ProductPost() {
               <option value="SOLD_OUT">판매종료</option>
             </select>
           </div>
-          {id ? (
-              <div className="form-group">
-                <label>상품이미지</label>
-                <div className="file-input-wrapper">
-                  <button type="button" className="btn-file-input" disabled>
-                    {imageCount > 0 ? `${imageCount}개의 이미지 등록됨` : '이미지 등록됨'}
-                  </button>
-                  <input
-                      type="file"
-                      id="product-image"
-                      name="product-image"
-                      accept="image/*"
-                      multiple
-                      style={{display: 'none'}}
-                      onChange={() => {
-                      }}
-                      disabled
-                  />
-                </div>
-                <small>* 이미지 수정 불가능</small>
-              </div>
-          ) : (
-              <div className="form-group">
-                <label htmlFor="product-image">상품이미지</label>
-                <div className="file-input-wrapper">
-                  <button type="button" className="btn-file-input"
-                          onClick={() => document.getElementById(
-                              'product-image').click()}>
-                    {imageCount > 0 ? `${imageCount}개의 이미지 선택됨` : '이미지 선택'}
-                  </button>
-                  <input
-                      type="file"
-                      id="product-image"
-                      name="product-image"
-                      accept="image/*"
-                      multiple
-                      style={{display: 'none'}}
-                      onChange={handleFileChange}
-                  />
-                </div>
-                <small>* 최대 5장까지 등록 가능합니다.</small>
-              </div>
-          )}
+            <div className="form-group">
+              <label htmlFor="post-image">이미지</label>
+              {id ? (
+                  <>
+                    <div className="image-preview">
+                      {productImage.map((image, index) => (
+                          <div key={index} className="image-container">
+                            <img src={image} alt={`preview ${index}`} />
+                          </div>
+                      ))}
+                    </div>
+                    <small>* 이미지 수정 불가능</small>
+                  </>
+              ) : (
+                  <>
+                  <div className="image-preview">
+                    {productImage.map((image, index) => (
+                        <div key={index} className="image-container">
+                          <img src={image} alt={`preview ${index}`} />
+                          <button type="button" className="remove-button" onClick={() => removeImage(image)}>X</button>
+                        </div>
+                    ))}
+                  </div>
+                  <div className="file-input-wrapper">
+                    <button type="button" className="btn-file-input" onClick={() => document.getElementById('post-image').click()}>
+                      이미지 선택
+                    </button>
+                    <input
+                        type="file"
+                        id="post-image"
+                        name="post-image"
+                        accept="image/*"
+                        multiple
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                    />
+                  </div>
+                    <small>* 최대 5장까지 등록 가능합니다.</small>
+                  </>
+              )}
+            </div>
           <div className="form-actions">
             <button type="submit" className="submit-button">{id ? '수정하기'
                 : '등록하기'}</button>
