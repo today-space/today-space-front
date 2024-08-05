@@ -6,6 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 function ProductPost() {
   const { id } = useParams(); 
   const [productImage, setProductImage] = useState([]);
+  const [productContent, setproductContent] = useState('');
+  const [images, setImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [imageCount, setImageCount] = useState(0);
   const navigate = useNavigate();
   const [product, setProduct] = useState({
@@ -33,6 +36,10 @@ function ProductPost() {
     const files = Array.from(e.target.files); 
     setProductImage(files);
     setImageCount(files.length);
+  };
+
+  const handleContentChange = (event) => {
+    setproductContent(event.target.value);
   };
 
   const handleInputChange = (e) => {
@@ -147,19 +154,23 @@ function ProductPost() {
         <form onSubmit={handleSubmit} method="POST"
               encType="multipart/form-data">
           <div className="form-group">
-            <label htmlFor="title">상품명</label>
-            <input
-                type="text"
-                id="title"
-                name="title"
-                value={product.title || ''}
-                required
-                placeholder={id ? product.title || '상품명을 입력해주세요' : '상품명을 입력해주세요'}
-                onChange={handleInputChange}
-            />
+            <div className="textarea-counter-wrapper">
+              <label htmlFor="title">상품명</label>
+              <textarea
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={product.title || ''}
+                  required
+                  placeholder={id ? product.title || '상품명을 입력해주세요'
+                      : '상품명을 입력해주세요'}
+                  onChange={handleInputChange}
+              />
+              <div className="textarea-counter">{product.title.length}/20</div>
+            </div>
           </div>
           <div className="form-group">
-            <label htmlFor="price">가격</label>
+          <label htmlFor="price">가격</label>
             <input
                 type="number"
                 id="price"
@@ -174,14 +185,17 @@ function ProductPost() {
           </div>
           <div className="form-group">
             <label htmlFor="content">설명</label>
+            <div className="textarea-counter-wrapper">
             <textarea
                 id="content"
                 name="content"
                 value={product.content || ''}
                 required
-                placeholder={id ? product.content || '상품에 대해 자세히 설명해주세요' : '상품에 대해 자세히 설명해주세요'}
+                placeholder={id ? product.content || '상품에 대해 자세히 설명해주세요'
+                    : '상품에 대해 자세히 설명해주세요'}
                 onChange={handleInputChange}
-            ></textarea>
+            />
+            <div className="textarea-counter">{product.content.length}/200</div>
           </div>
           <div className="form-group">
             <label htmlFor="address">지역 선택</label>
@@ -231,8 +245,9 @@ function ProductPost() {
                       name="product-image"
                       accept="image/*"
                       multiple
-                      style={{ display: 'none' }}
-                      onChange={() => {}}
+                      style={{display: 'none'}}
+                      onChange={() => {
+                      }}
                       disabled
                   />
                 </div>
@@ -242,7 +257,9 @@ function ProductPost() {
               <div className="form-group">
                 <label htmlFor="product-image">상품이미지</label>
                 <div className="file-input-wrapper">
-                  <button type="button" className="btn-file-input" onClick={() => document.getElementById('product-image').click()}>
+                  <button type="button" className="btn-file-input"
+                          onClick={() => document.getElementById(
+                              'product-image').click()}>
                     {imageCount > 0 ? `${imageCount}개의 이미지 선택됨` : '이미지 선택'}
                   </button>
                   <input
@@ -251,7 +268,7 @@ function ProductPost() {
                       name="product-image"
                       accept="image/*"
                       multiple
-                      style={{ display: 'none' }}
+                      style={{display: 'none'}}
                       onChange={handleFileChange}
                   />
                 </div>
@@ -259,8 +276,12 @@ function ProductPost() {
               </div>
           )}
           <div className="form-actions">
-            <button type="submit" className="submit-button">{id ? '수정하기' : '등록하기'}</button>
-            <button type="button" className="cancel-button" onClick={handleCancel}>취소</button>
+            <button type="submit" className="submit-button">{id ? '수정하기'
+                : '등록하기'}</button>
+            <button type="button" className="cancel-button"
+                    onClick={handleCancel}>취소
+            </button>
+          </div>
           </div>
         </form>
       </div>
