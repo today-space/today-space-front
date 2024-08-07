@@ -140,3 +140,15 @@ small {
 #product-location {
   width: calc(50% - 24px); /* 반으로 줄임 */
 }
+
+.textarea-counter-wrapper {
+  position: relative;
+}
+
+.textarea-counter {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  color: #adb5bd;
+  font-size: 14px;
+}
