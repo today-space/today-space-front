@@ -16,7 +16,7 @@ function AllPosts({ selectedTag, onTagClick }) {
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts`, {
-        params: { page, hashtag: selectedTag }
+        params: { page, hashtag: selectedTag === '전체' ? '' : selectedTag }
       });
       const data = response.data.data;
       setPosts(data.content);
