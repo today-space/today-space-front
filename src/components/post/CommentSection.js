@@ -5,18 +5,24 @@ import './post.css';
 const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     if (postId) {
       fetchComments();
     }
-  }, [postId]);
+  }, [postId, page]);
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`);
-      setComments(response.data.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`, {
+        params: { page }
+      });
+      const data = response.data.data;
+      setComments(data.content);
+      setTotalPages(data.totalPages);
     } catch (error) {
       console.error('Error fetching comments', error);
     }
@@ -49,6 +55,18 @@ const CommentSection = ({ postId }) => {
     }
   };
 
+  const getPaginationButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+          <button key={i} onClick={() => setPage(i)} className={page === i ? 'active' : ''}>
+            {i}
+          </button>
+      );
+    }
+    return buttons;
+  };
+
   return (
       <div className="right-content">
         <h2>댓글</h2>
@@ -78,6 +96,9 @@ const CommentSection = ({ postId }) => {
                 <span className="small">댓글을 남겨주세요.</span>
               </div>
           )}
+        </div>
+        <div className="pagination">
+          {getPaginationButtons()}
         </div>
         <form className="comment-form" onSubmit={handleSubmit}>
           <input
