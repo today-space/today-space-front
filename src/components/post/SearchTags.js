@@ -4,7 +4,7 @@ import './post.css';
 
 const SearchTags = ({ onTagClick }) => {
   const [tags, setTags] = useState([]);
-  const [selectedTag, setSelectedTag] = useState(null);
+  const [selectedTag, setSelectedTag] = useState('#전체');
 
   useEffect(() => {
     fetchTopTags();
@@ -14,7 +14,7 @@ const SearchTags = ({ onTagClick }) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/hashtags`);
       const data = response.data.data;
-      setTags(data);
+      setTags(['전체', ...data]); // '#전체' 태그를 목록의 처음에 추가
     } catch (error) {
       console.error('Error fetching top tags', error);
     }

@@ -9,7 +9,7 @@ import './page.css';
 function PostMain() {
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
-  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedTag, setSelectedTag] = useState('전체');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
