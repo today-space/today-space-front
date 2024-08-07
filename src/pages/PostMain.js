@@ -9,7 +9,7 @@ import './page.css';
 function PostMain() {
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
-  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedTag, setSelectedTag] = useState('전체'); // 초기 상태를 '전체'로 설정
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function PostMain() {
       <div>
         <Topbar />
         <div className="search-tags-wrapper">
-          <SearchTags onTagClick={handleTagClick} />
+          <SearchTags onTagClick={handleTagClick} selectedTag={selectedTag} />
         </div>
         {token && (
             <div className="add-post-button-wrapper">

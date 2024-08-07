@@ -6,7 +6,8 @@ import './postEditForm.css';
 function PostEditForm() {
   const { postId } = useParams();
   const [postContent, setPostContent] = useState('');
-  const [postHashtags, setPostHashtags] = useState('');
+  const [postHashtags, setPostHashtags] = useState([]);
+  const [deletedHashtags, setDeletedHashtags] = useState([]);
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -33,7 +34,7 @@ function PostEditForm() {
       console.log(data);  // 데이터 확인을 위한 로그 출력
 
       setPostContent(data.content);
-      setPostHashtags(data.hashtags.map(tag => `#${tag.hashtagName}`).join(' '));
+      setPostHashtags(data.hashtags.map(tag => `#${tag.hashtagName}`));
       setImages(data.images.map(image => image.imagePath));
       setIsLoaded(true);
     } catch (error) {
@@ -61,26 +62,43 @@ function PostEditForm() {
     }
   };
 
+  const handleTagInput = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const newTag = event.target.value.trim();
+      if (newTag && !postHashtags.includes(newTag)) {
+        setPostHashtags([...postHashtags, newTag]);
+      }
+      event.target.value = '';
+    }
+  };
+
+  const removeHashtag = (tag) => {
+    setPostHashtags(postHashtags.filter(t => t !== tag));
+    setDeletedHashtags([...deletedHashtags, tag]);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData();
     formData.append('data', new Blob([JSON.stringify({
       content: postContent,
-      hashtags: postHashtags.split(' ')
+      hashtags: postHashtags.map(tag => tag.replace('#', '')),
+      deleteHashtags: deletedHashtags.map(tag => tag.replace('#', '')),
     })], { type: 'application/json' }));
 
     selectedFiles.forEach((file, index) => {
       formData.append(`files[${index}]`, file);
     });
 
-    const token = localStorage.getItem('accessToken');  // 토큰 가져오기
+    const token = localStorage.getItem('accessToken');
 
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': token  // Authorization 헤더 추가
+          'Authorization': token,
         },
       });
 
@@ -170,14 +188,19 @@ function PostEditForm() {
                 type="text"
                 id="post-hashtags"
                 name="post-hashtags"
-                placeholder="#태그입력"
-                value={postHashtags}
-                onChange={(e) => setPostHashtags(e.target.value)}
+                placeholder="태그를 입력한 후 Enter키를 눌러주세요."
+                onKeyPress={handleTagInput}
             />
+            <div className="hashtags-preview">
+              {postHashtags.map((tag, index) => (
+                  <div key={index} className="hashtag">
+                    {tag}
+                    <button type="button" className="remove-hashtag" onClick={() => removeHashtag(tag)}>x</button>
+                  </div>
+              ))}
+            </div>
             <small className="tag-help">
-              태그를 입력해 주세요. (최대 5개)
               <ul>
-                <li>태그는 띄어쓰기로 구분되며 최대 9글자까지 입력할 수 있어요.</li>
                 <li>게시글을 잘 나타내는 다양한 태그를 입력해보세요.</li>
                 <li>적절한 태그를 사용하면 게시글 노출 기회가 늘어납니다.</li>
                 <li>부적절한 태그 사용 시 제재를 받을 수 있어요.</li>
