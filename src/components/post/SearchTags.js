@@ -4,6 +4,7 @@ import './post.css';
 
 const SearchTags = ({ onTagClick }) => {
   const [tags, setTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
     fetchTopTags();
@@ -19,12 +20,25 @@ const SearchTags = ({ onTagClick }) => {
     }
   };
 
+  const handleTagClick = (tag) => {
+    setSelectedTag(tag);
+    onTagClick(tag);
+  };
+
   return (
-      <div className="search-tags">
-        <div className="search-tags-content">
-          {tags.map((tag, index) => (
-              <span key={index} className="search-tag" onClick={() => onTagClick(tag)} style={{ cursor: 'pointer' }}>#{tag}</span>
-          ))}
+      <div className="search-tags-container">
+        <div className="search-tags-wrapper">
+          <div className="search-tags-content">
+            {tags.map((tag, index) => (
+                <span
+                    key={index}
+                    className={`search-tag ${selectedTag === tag ? 'selected' : ''}`}
+                    onClick={() => handleTagClick(tag)}
+                    style={{ cursor: 'pointer' }}>
+              #{tag}
+            </span>
+            ))}
+          </div>
         </div>
       </div>
   );

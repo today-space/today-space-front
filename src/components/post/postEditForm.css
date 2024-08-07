@@ -200,3 +200,28 @@ small {
 .remove-button:hover {
   background-color: rgba(0,0,0,0.8);
 }
+
+.hashtags-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.hashtag {
+  background-color: #f1f3f5;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.remove-hashtag {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 12px;
+  cursor: pointer;
+}

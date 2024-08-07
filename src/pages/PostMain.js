@@ -32,7 +32,7 @@ function PostMain() {
       <div>
         <Topbar />
         <div className="search-tags-wrapper">
-          <SearchTags onTagClick={handleTagClick} />
+          <SearchTags onTagClick={handleTagClick} selectedTag={selectedTag} />
         </div>
         {token && (
             <div className="add-post-button-wrapper">
