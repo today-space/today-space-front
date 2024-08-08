@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
 import ProductItem from './ProductItem';
 import './popular.css';
@@ -28,9 +30,7 @@ function PopularProducts() {
       <section className="section">
         <div className="section-header">
           <h2 className="section-title">인기 상품</h2>
-          <button className="section-link" id="addBtn"
-                  onClick={handleEditClick}>더보기
-          </button>
+          <div onClick={handleEditClick}>더보기 <FontAwesomeIcon icon={faAngleRight} /></div>
         </div>
         <div className="grid">
           {productData.map((product, index) => (
