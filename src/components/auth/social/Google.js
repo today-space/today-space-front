@@ -5,8 +5,9 @@ function Goolge() {
   };
 
   return (
-    <button onClick={handleGoogle}>
-      <img src="https://d1nuzc1w51n1es.cloudfront.net/d99d8628713bb69bd142.png" alt="구글 로그인" />
+    <button className="social-google" onClick={handleGoogle}>
+      <img src="/googleImg.png" alt="구글 로그인" />
+      <span>구글 로그인</span>
     </button>
   );
 }

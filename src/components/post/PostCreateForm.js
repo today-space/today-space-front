@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function PostCreateForm() {
   const [postContent, setPostContent] = useState('');
-  const [postHashtags, setPostHashtags] = useState('');
+  const [postHashtags, setPostHashtags] = useState([]);
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const navigate = useNavigate();
@@ -30,6 +30,21 @@ function PostCreateForm() {
     }
   };
 
+  const handleTagInput = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const newTag = event.target.value.trim();
+      if (newTag && !postHashtags.includes(newTag)) {
+        setPostHashtags([...postHashtags, newTag]);
+      }
+      event.target.value = '';
+    }
+  };
+
+  const removeHashtag = (tag) => {
+    setPostHashtags(postHashtags.filter(t => t !== tag));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -41,7 +56,7 @@ function PostCreateForm() {
     const formData = new FormData();
     formData.append('data', new Blob([JSON.stringify({
       content: postContent,
-      hashtags: postHashtags.split(' ')
+      hashtags: postHashtags
     })], { type: 'application/json' }));
 
     selectedFiles.forEach(file => {
@@ -152,10 +167,17 @@ function PostCreateForm() {
                 type="text"
                 id="post-hashtags"
                 name="post-hashtags"
-                placeholder="#태그입력"
-                value={postHashtags}
-                onChange={(e) => setPostHashtags(e.target.value)}
+                placeholder="태그를 입력한 후 Enter키를 눌러주세요."
+                onKeyPress={handleTagInput}
             />
+            <div className="hashtags-preview">
+              {postHashtags.map((tag, index) => (
+                  <div key={index} className="hashtag">
+                    {tag}
+                    <button type="button" className="remove-hashtag" onClick={() => removeHashtag(tag)}>x</button>
+                  </div>
+              ))}
+            </div>
             <small className="tag-help">
               태그를 입력해 주세요. (최대 5개)
               <ul>
@@ -169,7 +191,7 @@ function PostCreateForm() {
 
           <div className="form-actions">
             <button type="submit" className="submit-button">등록하기</button>
-            <button type="button" className="cancel-button">취소</button>
+            <button type="button" className="cancel-button" onClick={() => navigate("/post")}>취소</button>
           </div>
         </form>
       </div>

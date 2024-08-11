@@ -5,8 +5,9 @@ function Kakao() {
   };
 
   return (
-    <button onClick={handleKakao}>
-      <img src="http://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" alt="카카오 로그인" />
+    <button className="social-kakao" onClick={handleKakao}>
+      <img src="/kakaoImg.png" alt="카카오 로그인" />
+      <span>카카오 로그인</span>
     </button>
   );
 }
