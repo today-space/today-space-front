@@ -68,7 +68,7 @@ function Info() {
   };
 
   const handleNavigateChat = () => {
-    navigate(`/chat/${userInfo.username}`);
+    navigate(`/chat`);
   };
 
   return (

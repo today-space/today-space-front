@@ -86,8 +86,7 @@ function ProductDetail(){
       }
     }).then( (res) => {
       if (res.data.statusCode === 200) {
-        console.log("11111111")
-        navigate(`/chat/${username}`);
+        navigate(`/chat`);
       }
     }).catch( (err) => {
       console.log("err", err)
@@ -110,7 +109,7 @@ function ProductDetail(){
               }
             }).then( (res) => {
               if (res.data.statusCode === 200) {
-                navigate(`/chat/${username}`);
+                navigate(`/chat`);
               }
             }).catch( (err) => {
               console.log("채팅방 입장 실패: ", err);
