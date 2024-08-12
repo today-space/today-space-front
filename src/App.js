@@ -13,7 +13,10 @@ import ProductPostPage from "./pages/ProductPostPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PostDetailPage from "./pages/PostDetailPage"
 import Review from "./pages/Review";
-import Test from "./pages/Test";
+import Chat from "./pages/Chat";
+import PaymentSuccess from "./components/product/PaymentSuccess";
+import PaymentFail from "./components/product/PaymentFail";
+import PaymentCancel from "./components/product/PaymentCancel";
 
 function App() {
   return (
@@ -21,7 +24,6 @@ function App() {
       <Route path="/" element={<Main />} />
       <Route path="/auth/:id" element={<Auth />} />
       <Route path="/oauth/:id" element={<Oauth />} />
-      <Route path="/products" element={<ProductMainPage />} />
       <Route path="/post/edit/:postId" element={<PostEdit />} />
       <Route path="/post/create" element={<PostCreate />} />
       <Route path="/post" element={<PostMain />} />
@@ -32,7 +34,10 @@ function App() {
       <Route path="/post/:id" element={<PostDetailPage />} />
       <Route path="/mypage/:id" element={<MyPage />} />
       <Route path="/review/:id" element={<Review />} />
-      <Route path="/test" element={<Test />} />
+      <Route path="/chat" element={<Chat />} />      
+      <Route path="/payment/success" element={<PaymentSuccess />} />
+      <Route path="/payment/fail" element={<PaymentFail />} />
+      <Route path="/payment/cancel" element={<PaymentCancel />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

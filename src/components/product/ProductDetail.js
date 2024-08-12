@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
+import Payment from './Payment'
 
 function ProductDetail(){
 
@@ -85,8 +86,7 @@ function ProductDetail(){
       }
     }).then( (res) => {
       if (res.data.statusCode === 200) {
-        console.log("11111111")
-        navigate(`/chat/${username}`);
+        navigate(`/chat`);
       }
     }).catch( (err) => {
       console.log("err", err)
@@ -109,7 +109,7 @@ function ProductDetail(){
               }
             }).then( (res) => {
               if (res.data.statusCode === 200) {
-                navigate(`/chat/${username}`);
+                navigate(`/chat`);
               }
             }).catch( (err) => {
               console.log("채팅방 입장 실패: ", err);
@@ -173,7 +173,7 @@ function ProductDetail(){
           {productData.content}
         </p>
         <p className="product-price">{productData.price}</p>
-        <button className="btn btn-primary" id="purchaseBtn" onClick={handlePayment}>구매하기</button>
+        <Payment productData={productData} id={id}/>
         <div className="action-buttons">
           <Wish id={id}/>
           <button className="btn btn-secondary" id="chatBtn" onClick={handleChats}>채팅하기</button>

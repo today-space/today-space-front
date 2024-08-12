@@ -28,6 +28,7 @@ function PostList() {
           if (res.data.statusCode === 200) {
 
             const newAccessToken = res.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
 
             axios.get(`${process.env.REACT_APP_API_URL}/v1/my/posts`, {
               headers: {
@@ -35,7 +36,6 @@ function PostList() {
               }
             }).then( (res) => {
               if (res.data.statusCode === 200) {
-                localStorage.setItem("accessToken", newAccessToken);
                 setData(res.data.data.content);
               }
             }).catch( (err) => {

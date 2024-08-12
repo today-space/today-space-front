@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AWS from 'aws-sdk';
 import axios from 'axios';
 import './postCreateForm.css'; // 스타일을 위한 CSS 파일
 import { useNavigate } from 'react-router-dom';
@@ -8,13 +9,39 @@ function PostCreateForm() {
   const [postHashtags, setPostHashtags] = useState([]);
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [imageError, setImageError] = useState('');
   const navigate = useNavigate();
+
+  // S3 설정
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+    region: process.env.REACT_APP_AWS_REGION,
+  });
+
+  const uploadToS3 = async (file) => {
+    const params = {
+      Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+      Key: `post/${Date.now()}_${file.name}`,
+      Body: file,
+      ACL: 'public-read',
+    };
+
+    try {
+      const { Location } = await s3.upload(params).promise();
+      return Location;
+    } catch (error) {
+      console.error('S3 업로드 실패:', error);
+      throw error;
+    }
+  };
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     const newImages = files.map(file => URL.createObjectURL(file));
     setImages(prevImages => [...prevImages, ...newImages]);
     setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+    setImageError(''); 
   };
 
   const handleContentChange = (event) => {
@@ -48,33 +75,38 @@ function PostCreateForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (selectedFiles.length > 5) {
-      alert("이미지는 최대 5장까지 업로드할 수 있습니다.");
+    if (selectedFiles.length === 0) {
+      setImageError('이미지를 최소 1장 이상 업로드해야 합니다.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('data', new Blob([JSON.stringify({
-      content: postContent,
-      hashtags: postHashtags
-    })], { type: 'application/json' }));
-
-    selectedFiles.forEach(file => {
-      formData.append('files', file);
-    });
-
-    const token = localStorage.getItem('accessToken');
-
-    const makePostRequest = async (token) => {
-      return await axios.post(`${process.env.REACT_APP_API_URL}/v1/posts`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': token
-        },
-      });
-    };
+    if (selectedFiles.length > 5) {
+      setImageError('이미지는 최대 5장까지 업로드할 수 있습니다.');
+      return;
+    }
 
     try {
+      // S3에 이미지 업로드 및 URL 획득
+      const imageUrls = await Promise.all(
+          selectedFiles.map(file => uploadToS3(file))
+      );
+
+      const formData = {
+        content: postContent,
+        hashtags: postHashtags.map(tag => tag.replace('#', '')),
+        images: imageUrls,
+      };
+
+      const token = localStorage.getItem('accessToken');
+
+      const makePostRequest = async (token) => {
+        return await axios.post(`${process.env.REACT_APP_API_URL}/v1/posts`, formData, {
+          headers: {
+            'Authorization': token
+          },
+        });
+      };
+
       let response = await makePostRequest(token);
 
       if (response.status === 201) {
@@ -84,45 +116,15 @@ function PostCreateForm() {
         alert("게시글 등록에 실패했습니다.");
       }
     } catch (error) {
-      console.error('Initial post request error:', error);
-      if (error.response && error.response.status === 401) {
-        try {
-          const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
-            withCredentials: true
-          });
-
-          if (refreshResponse.status === 200) {
-            const newAccessToken = refreshResponse.headers.authorization;
-            localStorage.setItem("accessToken", newAccessToken);
-
-            // 재발급 받은 토큰으로 다시 요청
-            const retryResponse = await makePostRequest(newAccessToken);
-
-            if (retryResponse.status === 201) {
-              alert("게시글이 성공적으로 등록되었습니다.");
-              navigate("/post");
-            } else {
-              alert("게시글 등록에 실패했습니다.");
-            }
-          } else {
-            alert("로그인이 필요합니다.");
-            navigate("/login");
-          }
-        } catch (refreshError) {
-          console.error('Token refresh error:', refreshError);
-          alert("로그인이 필요합니다.");
-          navigate("/login");
-        }
-      } else {
-        alert("게시글 등록에 실패했습니다.");
-      }
+      console.error('게시글 등록 실패:', error);
+      alert("게시글 등록에 실패했습니다.");
     }
   };
 
   return (
       <div className="container">
         <h1>게시글 등록</h1>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="post-image">이미지</label>
             <div className="image-preview">
@@ -139,6 +141,7 @@ function PostCreateForm() {
               </button>
               <input type="file" id="post-image" name="post-image" accept="image/*" multiple onChange={handleFileChange} style={{ display: 'none' }} />
             </div>
+            {imageError && <div className="error-message">{imageError}</div>} {/* 오류 메시지 출력 */}
             <small>* 최대 5장까지 등록 가능합니다.</small>
           </div>
 
