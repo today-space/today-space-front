@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Client, Stomp } from '@stomp/stompjs';
+import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import axios from "axios";
 import ChatMessage from "./ChatMessage";
@@ -13,7 +13,7 @@ function ChatMain() {
   const [messageList, setMessageList] = useState([]);
   const [client, setClient] = useState(null);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messageData, setMessageData] = useState([]);
 
   const accessToken = localStorage.getItem("accessToken");
   const username = localStorage.getItem("username");
@@ -67,6 +67,8 @@ function ChatMain() {
       return;
     }
 
+    setMessageData([]);
+
     axios.get(`${process.env.REACT_APP_API_URL}/v1/chatroom/${chatRoomId}/message`, {
       headers: {
         "Authorization": accessToken
@@ -106,12 +108,54 @@ function ChatMain() {
       }
     });
 
+    const socket = new SockJS(`${process.env.REACT_APP_API_URL}/v1/ws`);
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({ Authorization: accessToken }, frame => {
+
+      stompClient.subscribe(`/v1/sub/chatroom/${chatRoomId}`, messageOutput => {
+
+        const newMessage = JSON.parse(messageOutput.body);
+        setMessageData(prevMessages => [...prevMessages, newMessage]);
+
+      });
+
+      setClient(stompClient);
+
+    });
+
+    return () => {
+      if (client) {
+        client.disconnect();
+      }
+    };
+
   }, [chatRoomId]);
 
   const handleChatRoomClick = (roomId, username) => {
     setChatRoomId(roomId);
     setChatRoomUsername(username);
-  }
+  };
+
+  const sendMessage = () => {
+    if (client && message.trim() !== "") {
+
+      client.send(`/v1/pub/chatroom/${chatRoomId}`, {}, JSON.stringify({
+        roomId: chatRoomId,
+        sender: username,
+        message: message
+      }));
+
+      setMessage("");
+
+    }
+  };
+
+  const handleSenderEnter = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
 
   return (
     <div className="chatmain-container">
@@ -147,15 +191,32 @@ function ChatMain() {
                           sender={sender}
                         />
               })}
+              {messageData.map( (el, index) => {
+
+                let sender = "chatmessage-other"
+
+                if (el.sender === localStorage.getItem("username")) {
+                  sender = "chatmessage-me";
+                }
+
+                return <ChatMessage 
+                          key={index}
+                          message={el.message}
+                          sender={sender}
+                        />
+              })}
             </div>
 
             <div className="chatmessage-input">
               <input
                 type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleSenderEnter}
                 placeholder="메시지를 입력하세요."
               />
 
-              <button>
+              <button onClick={sendMessage}>
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
                 </svg>
