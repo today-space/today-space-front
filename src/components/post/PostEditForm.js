@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AWS from 'aws-sdk';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import './postEditForm.css';
@@ -10,32 +11,56 @@ function PostEditForm() {
   const [deletedHashtags, setDeletedHashtags] = useState([]);
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]); // 추가된 부분
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken'); // 추가된 부분
 
   useEffect(() => {
     if (!postId) {
-      console.error('Post ID is undefined');
+      console.log('Creating new post');
+      setIsLoaded(true); 
       return;
     }
 
     fetchPostData();
   }, [postId]);
 
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+    region: process.env.REACT_APP_AWS_REGION,
+  });
+
+  const uploadToS3 = async (file) => {
+    const params = {
+      Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+      Key: `post/${Date.now()}_${file.name}`,
+      Body: file,
+      ACL: 'public-read',
+    };
+
+    try {
+      const { Key } = await s3.upload(params).promise();
+      console.log('Uploaded file Key:', Key); // 업로드된 파일 Key 확인
+      return Key; // S3 URL 대신 Key 값만 반환
+    } catch (error) {
+      console.error('S3 업로드 실패:', error); // 업로드 실패 시 에러 로그
+      throw error;
+    }
+  };
+
   const fetchPostData = async () => {
-    const token = localStorage.getItem('accessToken');  // 토큰 가져오기
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, {
         headers: {
-          'Authorization': token  // Authorization 헤더 추가
-        }
+          Authorization: token,
+        },
       });
       const data = response.data.data;
-      console.log(data);  // 데이터 확인을 위한 로그 출력
-
       setPostContent(data.content);
-      setPostHashtags(data.hashtags.map(tag => `#${tag.hashtagName}`));
-      setImages(data.images.map(image => image.imagePath));
+      setPostHashtags(data.hashtags.map((tag) => `#${tag.hashtagName}`));
+      setImages(data.images.map((image) => image.imagePath));
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching post data', error);
@@ -44,21 +69,25 @@ function PostEditForm() {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.map(file => URL.createObjectURL(file));
-    setImages(prevImages => [...prevImages, ...newImages]);
-    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
-  };
+    const newImages = files.map((file) => URL.createObjectURL(file));
 
-  const handleContentChange = (event) => {
-    setPostContent(event.target.value);
+    setImages((prevImages) => [...prevImages, ...newImages]);
+    setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
+
+    console.log('Selected Files:', selectedFiles); 
   };
 
   const removeImage = (url) => {
     const index = images.indexOf(url);
     if (index > -1) {
-      const updatedImages = images.filter(image => image !== url);
+      const updatedImages = images.filter((image) => image !== url);
       setImages(updatedImages);
-      setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+
+      if (url.startsWith('blob:')) {
+        setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+      } else {
+        setDeletedImages((prevDeletedImages) => [...prevDeletedImages, url]);
+      }
     }
   };
 
@@ -74,65 +103,88 @@ function PostEditForm() {
   };
 
   const removeHashtag = (tag) => {
-    setPostHashtags(postHashtags.filter(t => t !== tag));
+    setPostHashtags(postHashtags.filter((t) => t !== tag));
     setDeletedHashtags([...deletedHashtags, tag]);
+  };
+
+  const handleContentChange = (event) => {
+    setPostContent(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append('data', new Blob([JSON.stringify({
+    console.log('Selected Files:', selectedFiles);
+
+    const newImageKeys = await Promise.all(
+        selectedFiles.map((file) => uploadToS3(file))
+    );
+
+    console.log('Uploaded Image Keys:', newImageKeys);
+
+    const allImageKeys = [
+      ...images.filter((img) => !img.startsWith('blob:')),
+      ...newImageKeys,
+    ];
+
+    console.log('All Image Keys:', allImageKeys);
+    
+    const formData = {
       content: postContent,
-      hashtags: postHashtags.map(tag => tag.replace('#', '')),
-      deleteHashtags: deletedHashtags.map(tag => tag.replace('#', '')),
-    })], { type: 'application/json' }));
+      hashtags: postHashtags.map((tag) => tag.replace('#', '')),
+      deleteHashtags: deletedHashtags.map((tag) => tag.replace('#', '')),
+      images: allImageKeys,
+      deleteImageUrls: deletedImages,
+      newImages: newImageKeys 
+    };
 
-    selectedFiles.forEach((file, index) => {
-      formData.append(`files[${index}]`, file);
-    });
-
-    const token = localStorage.getItem('accessToken');
+    console.log('Form Data being sent:', formData);
 
     try {
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, formData, {
+      const response = await axios({
+        method: postId ? 'put' : 'post',
+        url: postId
+            ? `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`
+            : `${process.env.REACT_APP_API_URL}/v1/posts`,
+        data: formData,
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': token,
+          Authorization: token,
         },
       });
 
       if (response.status === 200) {
-        alert("게시글이 성공적으로 수정되었습니다.");
-        navigate("/post");
+        alert(`게시글이 성공적으로 ${postId ? '수정' : '생성'}되었습니다.`);
+        navigate('/post');
       } else {
-        alert("게시글 수정에 실패했습니다.");
+        alert(`게시글 ${postId ? '수정' : '생성'}에 실패했습니다.`);
       }
     } catch (error) {
-      console.error('Error updating post', error);
-      alert("게시글 수정에 실패했습니다.");
+      console.error(`Error ${postId ? 'updating' : 'creating'} post`, error);
+      alert(`게시글 ${postId ? '수정' : '생성'}에 실패했습니다.`);
     }
   };
 
-  const handleDelete = async () => {
-    const token = localStorage.getItem('accessToken');  // 토큰 가져오기
 
+  const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, {
-        headers: {
-          'Authorization': token  // Authorization 헤더 추가
-        },
-      });
+      const response = await axios.delete(
+          `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+      );
 
       if (response.status === 200) {
-        alert("게시글이 성공적으로 삭제되었습니다.");
-        navigate("/post");
+        alert('게시글이 성공적으로 삭제되었습니다.');
+        navigate('/post');
       } else {
-        alert("게시글 삭제에 실패했습니다.");
+        alert('게시글 삭제에 실패했습니다.');
       }
     } catch (error) {
       console.error('Error deleting post', error);
-      alert("게시글 삭제에 실패했습니다.");
+      alert('게시글 삭제에 실패했습니다.');
     }
   };
 
@@ -142,44 +194,55 @@ function PostEditForm() {
 
   return (
       <div className="container">
-        <h1>게시글 수정</h1>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <h1>{postId ? '게시글 수정' : '게시글 작성'}</h1>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="post-image">이미지</label>
             <div className="image-preview">
               {images.map((image, index) => (
                   <div key={index} className="image-container">
                     <img src={image} alt={`preview ${index}`} />
-                    <button type="button" className="remove-button" onClick={() => removeImage(image)}>X</button>
+                    <button
+                        type="button"
+                        className="remove-button"
+                        onClick={() => removeImage(image)}
+                    >
+                      X
+                    </button>
                   </div>
               ))}
             </div>
             <div className="file-input-wrapper">
-              <button type="button" className="btn-file-input" onClick={() => document.getElementById('post-image').click()}>
+              <button
+                  type="button"
+                  className="btn-file-input"
+                  onClick={() => document.getElementById('post-image').click()}
+              >
                 이미지 추가/변경
               </button>
-              <input type="file" id="post-image" name="post-image" accept="image/*" multiple onChange={handleFileChange} style={{ display: 'none' }} />
+              <input
+                  type="file"
+                  id="post-image"
+                  name="post-image"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}
+              />
             </div>
             <small>* 최대 5장까지 등록 가능합니다.</small>
           </div>
 
           <div className="form-group">
             <label htmlFor="post-content">내용</label>
-            <div className="textarea-counter-wrapper">
             <textarea
                 id="post-content"
                 name="post-content"
                 required
-                placeholder="게시글 내용을 자세히 작성해주세요"
+                placeholder="게시글 내용을 작성해주세요"
                 value={postContent}
                 onChange={handleContentChange}
             />
-              <div className="textarea-counter">{postContent.length}/2000</div>
-            </div>
-            <small className="tag-help">
-              게시글에 대해 자세히 설명해주세요.<br />
-              전화번호, SNS 계정 등 개인정보 입력은 금지될 수 있어요.
-            </small>
           </div>
 
           <div className="form-group">
@@ -195,23 +258,38 @@ function PostEditForm() {
               {postHashtags.map((tag, index) => (
                   <div key={index} className="hashtag">
                     {tag}
-                    <button type="button" className="remove-hashtag" onClick={() => removeHashtag(tag)}>x</button>
+                    <button
+                        type="button"
+                        className="remove-hashtag"
+                        onClick={() => removeHashtag(tag)}
+                    >
+                      x
+                    </button>
                   </div>
               ))}
             </div>
-            <small className="tag-help">
-              <ul>
-                <li>게시글을 잘 나타내는 다양한 태그를 입력해보세요.</li>
-                <li>적절한 태그를 사용하면 게시글 노출 기회가 늘어납니다.</li>
-                <li>부적절한 태그 사용 시 제재를 받을 수 있어요.</li>
-              </ul>
-            </small>
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="submit-button">수정</button>
-            <button type="button" className="cancel-button" onClick={() => navigate("/post")}>취소</button>
-            <button type="button" className="delete-button" onClick={handleDelete}>삭제</button>
+            <button type="submit" className="submit-button">
+              {postId ? '수정' : '작성'}
+            </button>
+            <button
+                type="button"
+                className="cancel-button"
+                onClick={() => navigate('/post')}
+            >
+              취소
+            </button>
+            {postId && (
+                <button
+                    type="button"
+                    className="delete-button"
+                    onClick={handleDelete}
+                >
+                  삭제
+                </button>
+            )}
           </div>
         </form>
       </div>
