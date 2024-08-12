@@ -42,9 +42,12 @@ function Profile() {
         }).then( (res) => {
           if (res.data.statusCode === 200) {
 
+            const newAccessToken = res.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
+
             axios.get(`${process.env.REACT_APP_API_URL}/v1/my/profile`, {
               headers: {
-                "Authorization": res.headers.authorization
+                "Authorization": newAccessToken
               }
             }).then( (res) => {
               if (res.data.statusCode === 200) {
