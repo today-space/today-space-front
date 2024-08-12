@@ -13,7 +13,7 @@ import ProductPostPage from "./pages/ProductPostPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PostDetailPage from "./pages/PostDetailPage"
 import Review from "./pages/Review";
-import Test from "./pages/Test";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
       <Route path="/post/:id" element={<PostDetailPage />} />
       <Route path="/mypage/:id" element={<MyPage />} />
       <Route path="/review/:id" element={<Review />} />
-      <Route path="/test" element={<Test />} />
+      <Route path="/chat" element={<Chat />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
