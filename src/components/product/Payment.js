@@ -14,11 +14,11 @@ function Payment({productData, id}) {
 
     const token = localStorage.getItem('accessToken');
 
-    try{
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/payment/kakao` 
-         ,{
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/payment/kakao`,
+          {
             item_name: productData.title,
-            total_amount: productData.price, 
+            total_amount: productData.price,
             productId: id
           },
           {
@@ -30,23 +30,51 @@ function Payment({productData, id}) {
       console.log(response);
 
       const userConfirmed = window.confirm("정말로 구매하시겠습니까?");
-      console.log(response);
       if (userConfirmed) {
         window.location.href = response.data.data.next_redirect_pc_url;
       }
 
-    }catch (error) {
-      console.error('Error making the request', error); // 에러 메시지 출력
-      
-      const { statusCode, message } = error.response.data;
-      if(statusCode === 400) {
-        alert(message);
+    } catch (error) {
+      if(error.response.data.statusCode === 409){
+        alert(error.response.data.message);
       }
-      if (statusCode === 401) {
-        alert(message);
-      }
-      if (statusCode === 409) {
-        alert(message); 
+      if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
+        try {
+          const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+            withCredentials: true
+          });
+
+          if (refreshResponse.data.statusCode === 200) {
+            const newAccessToken = refreshResponse.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
+
+            const retryResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/payment/kakao`,
+                {
+                  item_name: productData.title,
+                  total_amount: productData.price,
+                  productId: id
+                },
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': newAccessToken
+                  },
+                });
+            console.log(retryResponse);
+
+            const userConfirmed = window.confirm("정말로 구매하시겠습니까?");
+            if (userConfirmed) {
+              window.location.href = retryResponse.data.data.next_redirect_pc_url;
+            }
+          }
+        } catch (refreshError) {
+          if(refreshError.response.data.statusCode === 409){
+            alert(error.response.data.message);
+          }
+          console.log("토큰 재발급 실패: ", refreshError);
+        }
+      } else {
+        console.log("결제 요청 실패: ", error);
       }
     }
   };

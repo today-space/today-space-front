@@ -18,13 +18,13 @@ const PaymentSuccess = () => {
               `${process.env.REACT_APP_API_URL}/v1/payment/success/kakao`,
               {
                 pgToken: pgToken,
-                productId: productId
+                productId: productId,
               },
               {
                 headers: {
                   'Content-Type': 'application/json',
-                  'Authorization': token
-                }
+                  'Authorization': token,
+                },
               }
           );
 
@@ -36,7 +36,49 @@ const PaymentSuccess = () => {
             }
           }
         } catch (error) {
-          console.error('Error processing payment:', error);
+
+          const token = localStorage.getItem('accessToken');
+          const pgToken = new URLSearchParams(window.location.search).get('pg_token');
+          const productId = Number(localStorage.getItem('productId'));
+          
+          if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
+            try {
+              const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+                withCredentials: true,
+              });
+
+              if (refreshResponse.data.statusCode === 200) {
+                const newAccessToken = refreshResponse.headers.authorization;
+                localStorage.setItem("accessToken", newAccessToken);
+
+                const retryResponse = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/v1/payment/success/kakao`,
+                    {
+                      pgToken: pgToken,
+                      productId: productId,
+                    },
+                    {
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': newAccessToken,
+                      },
+                    }
+                );
+
+                if (retryResponse.status === 200) {
+                  console.log(retryResponse);
+                  const userConfirmed = window.confirm("결제가 완료되었습니다. 확인을 누르면 쇼핑 페이지로 이동합니다.");
+                  if (userConfirmed) {
+                    navigate('/product');
+                  }
+                }
+              }
+            } catch (refreshError) {
+              console.log("토큰 재발급 실패: ", refreshError);
+            }
+          } else {
+            console.log("결제 요청 실패: ", error);
+          }
         }
       };
 

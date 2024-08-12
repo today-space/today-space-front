@@ -11,7 +11,7 @@ const PaymentCancel = () => {
         const token = localStorage.getItem('accessToken');
         const productId = Number(localStorage.getItem('productId'));
 
-        const response = await axios.delete(
+        let response = await axios.delete(
             `${process.env.REACT_APP_API_URL}/v1/payment/cancel`,
             {
               headers: {
@@ -31,7 +31,48 @@ const PaymentCancel = () => {
           }
         }
       } catch (error) {
-        console.error('Error processing payment:', error);
+        if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
+          try {
+
+            const refreshResponse = await axios.post(
+                `${process.env.REACT_APP_API_URL}/v1/auth/refresh`,
+                {},
+                { withCredentials: true }
+            );
+
+            if (refreshResponse.data.statusCode === 200) {
+              const newAccessToken = refreshResponse.headers.authorization;
+              localStorage.setItem("accessToken", newAccessToken);
+
+              const productId = Number(localStorage.getItem('productId'));
+
+              const retryResponse = await axios.delete(
+                  `${process.env.REACT_APP_API_URL}/v1/payment/cancel`,
+                  {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': newAccessToken
+                    },
+                    params: {
+                      productId: productId
+                    }
+                  }
+              );
+
+              if (retryResponse.status === 200) {
+                const userConfirmed = window.confirm(
+                    "결제가 취소되었습니다. 확인을 누르면 쇼핑 페이지로 이동합니다.");
+                if (userConfirmed) {
+                  navigate('/product');
+                }
+              }
+            }
+          } catch (refreshError) {
+            console.log("토큰 재발급 실패: ", refreshError);
+          }
+        } else {
+          console.log("결제 요청 실패: ", error);
+        }
       }
     };
 
