@@ -182,7 +182,7 @@ function ProductPost() {
             </div>
           </div>
           <div className="form-group">
-          <label htmlFor="price">가격</label>
+            <label htmlFor="price">가격</label>
             <input
                 type="number"
                 id="price"
@@ -207,43 +207,44 @@ function ProductPost() {
                     : '상품에 대해 자세히 설명해주세요'}
                 onChange={handleInputChange}
             />
-            <div className="textarea-counter">{product.content.length}/200</div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">지역 선택</label>
-            <select
-                id="address"
-                name="address"
-                value={product.address || 'ALL'}
-                onChange={handleInputChange}
-                required
-            >
-              <option value="ALL">전체 지역</option>
-              <option value="SEOUL">서울</option>
-              <option value="GYEONGGI">경기</option>
-              <option value="GANGWON">강원</option>
-              <option value="CHUNGCHEONGBUK">충북</option>
-              <option value="CHUNGCHEONGNAM">충남(대전)</option>
-              <option value="GYEONGSANGBUK">경북(대구)</option>
-              <option value="GYEONGSANGNAM">경남(부산)</option>
-              <option value="JEOLLABUK">전북</option>
-              <option value="JEOLLANAM">전남</option>
-              <option value="JEJU">제주</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="state">상태</label>
-            <select
-                id="state"
-                name="state"
-                value={product.state || ''}
-                onChange={handleInputChange}
-                required
-            >
-              <option value="ON_SALE">판매중</option>
-              <option value="SOLD_OUT">판매종료</option>
-            </select>
-          </div>
+              <div className="textarea-counter">{product.content.length}/200
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="address">지역 선택</label>
+              <select
+                  id="address"
+                  name="address"
+                  value={product.address || 'ALL'}
+                  onChange={handleInputChange}
+                  required
+              >
+                <option value="ALL">전체 지역</option>
+                <option value="SEOUL">서울</option>
+                <option value="GYEONGGI">경기</option>
+                <option value="GANGWON">강원</option>
+                <option value="CHUNGCHEONGBUK">충북</option>
+                <option value="CHUNGCHEONGNAM">충남(대전)</option>
+                <option value="GYEONGSANGBUK">경북(대구)</option>
+                <option value="GYEONGSANGNAM">경남(부산)</option>
+                <option value="JEOLLABUK">전북</option>
+                <option value="JEOLLANAM">전남</option>
+                <option value="JEJU">제주</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="state">상태</label>
+              <select
+                  id="state"
+                  name="state"
+                  value={product.state || ''}
+                  onChange={handleInputChange}
+                  required
+              >
+                <option value="ON_SALE">판매중</option>
+                <option value="SOLD_OUT">판매종료</option>
+              </select>
+            </div>
             <div className="form-group">
               <label htmlFor="post-image">이미지</label>
               {id ? (
@@ -251,7 +252,7 @@ function ProductPost() {
                     <div className="image-preview">
                       {productImage.map((image, index) => (
                           <div key={index} className="image-container">
-                            <img src={image} alt={`preview ${index}`} />
+                            <img src={image} alt={`preview ${index}`}/>
                           </div>
                       ))}
                     </div>
@@ -259,39 +260,43 @@ function ProductPost() {
                   </>
               ) : (
                   <>
-                  <div className="image-preview">
-                    {productImage.map((image, index) => (
-                        <div key={index} className="image-container">
-                          <img src={image} alt={`preview ${index}`} />
-                          <button type="button" className="remove-button" onClick={() => removeImage(image)}>X</button>
-                        </div>
-                    ))}
-                  </div>
-                  <div className="file-input-wrapper">
-                    <button type="button" className="btn-file-input" onClick={() => document.getElementById('post-image').click()}>
-                      이미지 선택
-                    </button>
-                    <input
-                        type="file"
-                        id="post-image"
-                        name="post-image"
-                        accept="image/*"
-                        multiple
-                        onChange={handleFileChange}
-                        style={{ display: 'none' }}
-                    />
-                  </div>
+                    <div className="image-preview">
+                      {productImage.map((image, index) => (
+                          <div key={index} className="image-container">
+                            <img src={image} alt={`preview ${index}`}/>
+                            <button type="button" className="remove-button"
+                                    onClick={() => removeImage(image)}>X
+                            </button>
+                          </div>
+                      ))}
+                    </div>
+                    <div className="file-input-wrapper">
+                      <button type="button" className="btn-file-input"
+                              onClick={() => document.getElementById(
+                                  'post-image').click()}>
+                        이미지 선택
+                      </button>
+                      <input
+                          type="file"
+                          id="post-image"
+                          name="post-image"
+                          accept="image/*"
+                          multiple
+                          onChange={handleFileChange}
+                          style={{display: 'none'}}
+                      />
+                    </div>
                     <small>* 최대 5장까지 등록 가능합니다.</small>
                   </>
               )}
             </div>
-          <div className="form-actions">
-            <button type="submit" className="submit-button">{id ? '수정하기'
-                : '등록하기'}</button>
-            <button type="button" className="cancel-button"
-                    onClick={handleCancel}>취소
-            </button>
-          </div>
+            <div className="form-actions">
+              <button type="submit" className="submit-button">{id ? '수정하기'
+                  : '등록하기'}</button>
+              <button type="button" className="cancel-button"
+                      onClick={handleCancel}>취소
+              </button>
+            </div>
           </div>
         </form>
       </div>

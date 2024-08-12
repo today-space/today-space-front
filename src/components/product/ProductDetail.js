@@ -4,6 +4,7 @@ import {useParams, useNavigate } from "react-router-dom";
 import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
+import Payment from './Payment'
 
 function ProductDetail(){
 
@@ -113,7 +114,7 @@ function ProductDetail(){
           {productData.content}
         </p>
         <p className="product-price">{productData.price}</p>
-        <button className="btn btn-primary" id="purchaseBtn" onClick={handlePayment}>구매하기</button>
+        <Payment productData={productData} id={id}/>
         <div className="action-buttons">
           <Wish id={id}/>
           <button className="btn btn-secondary" id="chatBtn" onClick={handleChats}>채팅하기</button>
