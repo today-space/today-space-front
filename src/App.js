@@ -16,6 +16,7 @@ import Review from "./pages/Review";
 import PaymentSuccess from "./components/product/PaymentSuccess";
 import PaymentFail from "./components/product/PaymentFail";
 import PaymentCancel from "./components/product/PaymentCancel";
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
       <Route path="/post/:id" element={<PostDetailPage />} />
       <Route path="/mypage/:id" element={<MyPage />} />
       <Route path="/review/:id" element={<Review />} />
+      <Route path="/test" element={<Test />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/fail" element={<PaymentFail />} />

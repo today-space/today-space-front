@@ -3,13 +3,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './post.css';
 
-const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date, tags, postId, onTagClick }) => {
+const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date, tags, postId, onTagClick, selectedTag }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(likeCount);
   const token = localStorage.getItem('accessToken');
   const currentUsername = localStorage.getItem('username'); // localStorage에서 현재 사용자의 username을 가져옴
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (postId) {
       checkIfLiked();
@@ -85,7 +85,14 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
 
         <div className="post-tags">
           {tags.map((tag, index) => (
-              <span key={index} className="tag" onClick={() => onTagClick(tag)} style={{ cursor: 'pointer' }}>#{tag}</span>
+              <span
+                  key={index}
+                  className={`tag ${selectedTag === tag ? 'selected' : ''}`}
+                  onClick={() => onTagClick(tag)}
+                  style={{ cursor: 'pointer' }}
+              >
+            #{tag}
+          </span>
           ))}
         </div>
       </div>

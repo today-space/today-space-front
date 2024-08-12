@@ -18,6 +18,11 @@
   margin-bottom: 20px;
   padding: 10px 0;
 }
+.section-header > div, .section-header > div > svg {
+  color: var(--primary-color);
+  font-size: 15px;
+  cursor: pointer;
+}
 .section-title {
   font-size: 24px;
   margin: 0;

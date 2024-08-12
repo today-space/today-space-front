@@ -1,6 +1,7 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
@@ -12,6 +13,7 @@ function ProductDetail(){
   const [isCheck, setIsCheck] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const isAuthenticated = useSelector( (state) => state.auth.isLogIn);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/v1/products/${id}`, {
@@ -62,8 +64,66 @@ function ProductDetail(){
   };
 
   const handleChats= () => {
-    
-      alert("개발중입니다");
+
+    if (!isAuthenticated) {
+      return alert("로그인 후 이용가능합니다.");
+    }
+
+    const accessToken = localStorage.getItem("accessToken");
+    const username = localStorage.getItem("username");
+
+    if (username === productData.userName) {
+      return alert("자신의 상품에는 채팅을 할 수 없습니다.")
+    }
+
+    axios.post(`${process.env.REACT_APP_API_URL}/v1/chatroom`, {
+      productId: productData.id,
+      seller: productData.userId
+    }, {
+      withCredentials: true,
+      headers: {
+        "Authorization": accessToken
+      }
+    }).then( (res) => {
+      if (res.data.statusCode === 200) {
+        console.log("11111111")
+        navigate(`/chat/${username}`);
+      }
+    }).catch( (err) => {
+      console.log("err", err)
+      if (err.response.data.message === "토큰이 만료되었습니다.") {
+
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+          withCredentials: true
+        }).then( (res) => {
+          if (res.data.statusCode === 200) {
+
+            const newAccessToken = res.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
+
+            axios.post(`${process.env.REACT_APP_API_URL}/v1/chatroom`, {
+              productId: productData.id,
+              seller: productData.userId
+            }, {
+              headers: {
+                "Authorization": newAccessToken
+              }
+            }).then( (res) => {
+              if (res.data.statusCode === 200) {
+                navigate(`/chat/${username}`);
+              }
+            }).catch( (err) => {
+              console.log("채팅방 입장 실패: ", err);
+            });
+
+          }
+        }).catch( (err) => {
+          console.log("토큰 재발급 실패: ", err);
+        });
+
+      }
+    });
+
   };
 
   return (

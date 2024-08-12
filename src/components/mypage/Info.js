@@ -35,9 +35,12 @@ function Info() {
         }).then( (res) => {
           if (res.data.statusCode === 200) {
 
+            const newAccessToken = res.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
+
             axios.get(`${process.env.REACT_APP_API_URL}/v1/my/profile`, {
               headers: {
-                "Authorization": res.headers.authorization
+                "Authorization": newAccessToken
               }
             }).then( (res) => {
               if (res.data.statusCode === 200) {
@@ -64,6 +67,10 @@ function Info() {
     navigate("/mypage/modify");
   };
 
+  const handleNavigateChat = () => {
+    navigate(`/chat/${userInfo.username}`);
+  };
+
   return (
     <div className="info-container">
       <div className="info-container-user">
@@ -75,7 +82,7 @@ function Info() {
 
       <div className="info-container-button">
         <button onClick={handleNavigateModify}>프로필 수정</button>
-        <button>채팅</button>
+        <button onClick={handleNavigateChat}>채팅</button>
       </div>
     </div>
   );
