@@ -44,6 +44,7 @@ const ProductMain = () => {
       setProducts(response.data.data.content);
       setTotalPages(response.data.data.totalPages);
       console.log('API 응답:', response.data);
+      console.log('payment확인', response.data.data.content);
 
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -135,7 +136,7 @@ const ProductMain = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setPage(1); // 페이지를 1로 설정
-    fetchProducts(1, sortOption, search, regionOption); 
+    fetchProducts(1, sortOption, search, regionOption);
   };
 
   return (
@@ -182,8 +183,11 @@ const ProductMain = () => {
         </div>
         <div className="grid">
           {products.map(product => (
-              <div key={product.id} className="item"
-                   onClick={() => handlePostClick(product.id)}>
+              <div
+                  key={product.id}
+                  className={`item ${product.paymentState ? 'paid' : ''}`}
+                  onClick={() => handlePostClick(product.id)}
+              >
                 <img src={product.imagePath} alt={product.title}/>
                 <div className="item-info">
                   <h3>{product.title}</h3>
@@ -193,7 +197,7 @@ const ProductMain = () => {
           ))}
         </div>
         <div className="pagination">
-            {getPaginationButtons()}
+          {getPaginationButtons()}
         </div>
       </div>
   );

@@ -41,6 +41,7 @@ function PopularProducts() {
                   altText={product.title}
                   title={product.title}
                   price={product.price}
+                  className={`item ${product.paymentState ? 'paid' : ''}`}
               />
           ))}
         </div>
