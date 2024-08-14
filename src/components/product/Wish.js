@@ -1,94 +1,57 @@
-import axios from "axios";
-import './productdetail.css'
 import React, {useState} from 'react';
+import axios from 'axios';
+import "./productdetail.css";
 
 function Wish({id}) {
+  const [wish, setWish] = useState(false); // 초기에는 좋아요가 눌리지 않은 상태
 
-  const [isWished, setIsWished] = useState(false);
+  const handleLikeButtonClick = async () => {
+  const token = localStorage.getItem('accessToken');
 
-  const handleWish = () => {
-
-    const accessToken = localStorage.getItem('accessToken');
-
-    if (!accessToken) {
+    if (!token) {
       alert('로그인 후 찜할 수 있습니다.');
       return;
     }
 
-    axios.post(`${process.env.REACT_APP_API_URL}/v1/products/${id}/wish`, {}, {
-      headers: {
-        "Authorization": accessToken
-      }, withCredentials: true,
-    }).then((res) => {
-      if (res.data.statusCode === 200) {
-        
-        setIsWished(!isWished);
-        if (isWished === false) {
-          
-          alert('찜하기 성공');
-        } else {
-          
-          alert('취소 성공');
-        }
-
-        console.log('API 응답:', res.data);
-      }
-    }).catch((err) => {
-      if (err.response.data.message === "토큰이 만료되었습니다.") {
-
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
-          withCredentials: true
-        }).then((res) => {
-          if (res.data.statusCode === 200) {
-
-            const newAccessToken = res.headers.authorization;
-
-            axios.post(
-                `${process.env.REACT_APP_API_URL}/v1/products/${id}/wish`, {}, {
-                  headers: {
-                    "Authorization": newAccessToken
-                  },
-                  withCredentials: true,
-                }).then((res) => {
-              if (res.data.statusCode === 200) {
-                
-                localStorage.setItem("accessToken", newAccessToken);
-                setIsWished(!isWished);
-                if (isWished === false) {
-                  
-                  alert('찜하기 성공');
-                } else {
-                  
-                  alert('취소 성공');
-                }
-                console.log('API 응답:', res.data);
-              }
-            }).catch((err) => {
-              
-              console.log("오류 내용: ", err);
+    try {
+      if (wish) {
+        // 좋아요가 이미 눌린 상태라면, DELETE 요청
+        await axios.delete(
+            `${process.env.REACT_APP_API_URL}/v1/products/${id}/wish`, {
+              headers: {
+                'Authorization': token,
+              },
             });
+      } else {
 
-          }
-        }).catch((err) => {
-          
-          console.log("토큰 재발급 실패: ", err);
-        });
-
+        await axios.post(
+            `${process.env.REACT_APP_API_URL}/v1/products/${id}/wish`, {}, {
+              headers: {
+                'Authorization': token,
+              },
+            });
       }
-    });
 
-  }
+      // 상태 업데이트: liked의 값을 반전시켜 UI를 갱신
+      setWish(!wish);
+    } catch (error) {
+      if (error.response.data.statusCode === 400) {
+        alert(error.response.data.message);
+      }
+      console.error('오류', error);
+    }
+  };
 
   return (
       <div className="action-buttons">
-        <button
-            className={`btn ${isWished ? 'btn-wished'
-                : 'btn-outline'}`} 
-            id={`wishlistBtn-${id}`} 
-            onClick={handleWish}
-        >
-          {isWished ? '취소하기' : '찜하기'}
-        </button>
+      <button
+          className={`btn ${wish ? 'btn-wished'
+              : 'btn-outline'}`}
+          id={`wishlistBtn-${id}`}
+          onClick={handleLikeButtonClick}
+      >
+        {wish ? '찜 삭제' : '찜하기'}
+      </button>
       </div>
   );
 }
