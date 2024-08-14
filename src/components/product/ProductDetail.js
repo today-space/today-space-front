@@ -159,7 +159,7 @@ function ProductDetail(){
         </div>
         <div className="seller-info">
           {productData.userImagePath 
-          ? <img src={`https://today-space.s3.ap-northeast-2.amazonaws.com/${productData.userImagePath}`} alt="판매자 프로필"
+          ? <img src={`${productData.userImagePath}`} alt="판매자 프로필"
           className="seller-avatar" onClick={handleNavigate} />
           : <img src="/defaultProfileImg.png" alt="판매자 프로필"
           className="seller-avatar" onClick={handleNavigate} />}

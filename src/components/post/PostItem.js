@@ -54,7 +54,7 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
     navigate(`/post/edit/${postId}`);
   };
 
-  const fullProfileImageUrl = profileImage ? `https://today-space.s3.ap-northeast-2.amazonaws.com/${profileImage}` : 'https://via.placeholder.com/36';
+  const fullProfileImageUrl = profileImage ? `${profileImage}` : 'https://via.placeholder.com/36';
 
   return (
       <div className="left-content">
