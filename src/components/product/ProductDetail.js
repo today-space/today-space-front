@@ -6,6 +6,7 @@ import './productdetail.css'
 import Wish from './Wish'
 import Delete from './Delete'
 import Payment from './Payment'
+import Review from './Review'
 
 function ProductDetail(){
 
@@ -25,20 +26,20 @@ function ProductDetail(){
         console.log(localStorage.getItem("username"));
         console.log(response.data.data.userName);
         if (localStorage.getItem("username") === response.data.data.userName) {
-          
+
           setIsCheck(true);
         }
         console.log('API 응답:', response.data);
       }
     })
     .catch(error => {
-      
+
       console.error('Error fetching data:', error);
     });
   }, [id]);
 
   useEffect(() => {
-    
+
     console.log('isCheck 상태가 변경되었습니다:', isCheck);
   }, [isCheck]);
 
@@ -51,12 +52,12 @@ function ProductDetail(){
   }
 
   const handleEditClick = () => {
-    
+
     navigate(`/productpost/${id}`);
   };
 
   const handlePayment= () => {
-    
+
     const userConfirmed = window.confirm("정말로 구매하시겠습니까?");
     if (userConfirmed) {
       alert("개발중입니다");
@@ -158,11 +159,11 @@ function ProductDetail(){
           </div>
         </div>
         <div className="seller-info">
-          {productData.userImagePath 
-          ? <img src={`https://today-space.s3.ap-northeast-2.amazonaws.com/${productData.userImagePath}`} alt="판매자 프로필"
-          className="seller-avatar" onClick={handleNavigate} />
-          : <img src="/defaultProfileImg.png" alt="판매자 프로필"
-          className="seller-avatar" onClick={handleNavigate} />}
+          {productData.userImagePath
+              ? <img src={`https://today-space.s3.ap-northeast-2.amazonaws.com/${productData.userImagePath}`} alt="판매자 프로필"
+                     className="seller-avatar" onClick={handleNavigate} />
+              : <img src="/defaultProfileImg.png" alt="판매자 프로필"
+                     className="seller-avatar" onClick={handleNavigate} />}
           <div className="seller-details" onClick={handleNavigate}>
             <span className="seller-name">{productData.userName}</span>
             <span className="seller-meta">{new Date(
@@ -173,7 +174,13 @@ function ProductDetail(){
           {productData.content}
         </p>
         <p className="product-price">{productData.price}</p>
-        <Payment productData={productData} id={id}/>
+        <div>
+          {productData.paymentState && localStorage.getItem("username") === productData.paymentUser ? (
+              <Review productData={productData} id={id} />
+          ) : (
+              <Payment productData={productData} id={id} />
+          )}
+        </div>
         <div className="action-buttons">
           <Wish id={id}/>
           <button className="btn btn-secondary" id="chatBtn" onClick={handleChats}>채팅하기</button>

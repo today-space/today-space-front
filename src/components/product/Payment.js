@@ -78,7 +78,7 @@ function Payment({productData, id}) {
       }
     }
   };
-  
+
 
 
 
@@ -86,7 +86,8 @@ function Payment({productData, id}) {
       <div>
         <small>* 100원 이상부터 결제 가능합니다.</small>
         <button className="btn btn-primary" id="purchaseBtn"
-                onClick={handlePayment}>구매하기
+                onClick={handlePayment}>
+          {productData.paymentState ? '구매완료' : '구매하기'}
         </button>
       </div>
   );
