@@ -32,7 +32,7 @@ function PostDetail() {
         <div className="post-box">
           <div className="content-wrapper">
             <PostDetailItem
-                profileImage={post.profileImage ? `https://today-space.s3.ap-northeast-2.amazonaws.com/${post.profileImage}` : 'https://via.placeholder.com/36'}
+                profileImage={post.profileImage ? `${post.profileImage}` : 'https://via.placeholder.com/36'}
                 nickname={post.nickname || '익명'}
                 postImage={postImage}
                 likeCount={post.likeCount}
