@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import './popular.css'; // 스타일을 위한 CSS 파일
 
-const ProductItem = ({ productId, imagePath, altText, title, price }) => {
+const ProductItem = ({ productId, imagePath, altText, title, price, className}) => {
   
   const navigate = useNavigate();
 
@@ -11,7 +11,7 @@ const ProductItem = ({ productId, imagePath, altText, title, price }) => {
   };
   
   return (
-      <div className="item" onClick={handleNavigate}>
+      <div className={className} onClick={handleNavigate}>
         <img src={imagePath} alt={altText} />
         <div className="item-info">
           <h3 className="product-title">{title}</h3>
