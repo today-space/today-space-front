@@ -37,8 +37,8 @@ function Review({ productData, id }) {
   return (
       <div>
         <button
-            className="btn btn-primary"
-            id="reviewBtn"
+            className="reviewBtn reviewBtn-post"
+            // id="reviewBtn"
             onClick={() => setIsReviewing(true)}
         >
           후기 작성
@@ -62,7 +62,7 @@ function Review({ productData, id }) {
               />
                   <div className="textarea-counter">{reviewContent.length}/100</div>
                 </div>
-                <button onClick={handleReview}>리뷰 제출</button>
+                <button className="reviewBtn" onClick={handleReview}>리뷰 제출</button>
               </div>
             </div>
         )}
