@@ -63,6 +63,7 @@ function WishList() {
             altText={el.imagePath}
             title={el.title}
             price={el.price}
+            className="item"
           />
         ))}
       </div>
