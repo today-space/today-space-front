@@ -54,7 +54,7 @@ function ProductPost() {
           address: data.address,
           state: data.state
         });
-        setProductImage(data.images.map(img => img.imagePath));
+        setProductImage(data.imageUrlList.map(img => img.imagePath));
       })
       .catch(error => {
         console.error('Error fetching product data:', error);
@@ -236,6 +236,7 @@ function ProductPost() {
                   </div>
               ))}
             </div>
+            {id ? <small>이미지는 수정 불가능합니다.</small> : null}
             {!id && (
                 <>
                   <div className="file-input-wrapper">
