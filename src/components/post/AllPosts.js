@@ -32,21 +32,32 @@ function AllPosts({ selectedTag, onTagClick }) {
   const getPaginationButtons = () => {
     const buttons = [];
     const maxButtons = 5;
-    const halfMaxButtons = Math.floor(maxButtons / 2);
+    const currentGroup = Math.ceil(page / maxButtons);
+    const totalGroups = Math.ceil(totalPages / maxButtons);
 
-    let startPage = Math.max(1, page - halfMaxButtons);
-    let endPage = Math.min(totalPages, page + halfMaxButtons);
+    const startPage = (currentGroup - 1) * maxButtons + 1;
+    const endPage = Math.min(currentGroup * maxButtons, totalPages);
 
-    if (endPage - startPage + 1 < maxButtons) {
-      const diff = maxButtons - (endPage - startPage + 1);
-      startPage = Math.max(1, startPage - diff);
-      endPage = Math.min(totalPages, endPage + diff);
+    if (currentGroup > 1) {
+      buttons.push(
+          <button key="prev-group" onClick={() => setPage(startPage - 1)}>
+            &laquo;
+          </button>
+      );
     }
 
     for (let i = startPage; i <= endPage; i++) {
       buttons.push(
           <button key={i} onClick={() => setPage(i)} className={page === i ? 'active' : ''}>
             {i}
+          </button>
+      );
+    }
+
+    if (currentGroup < totalGroups) {
+      buttons.push(
+          <button key="next-group" onClick={() => setPage(endPage + 1)}>
+            &raquo;
           </button>
       );
     }

@@ -30,12 +30,13 @@ const CommentSection = ({ postId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return;
 
     if (!token) {
       alert('로그인 후 댓글을 남길 수 있습니다.');
       return;
     }
+
+    if (!newComment.trim()) return;
 
     try {
       await axios.post(
@@ -57,13 +58,37 @@ const CommentSection = ({ postId }) => {
 
   const getPaginationButtons = () => {
     const buttons = [];
-    for (let i = 1; i <= totalPages; i++) {
+    const maxButtons = 5;
+    const currentGroup = Math.ceil(page / maxButtons);
+    const totalGroups = Math.ceil(totalPages / maxButtons);
+
+    const startPage = (currentGroup - 1) * maxButtons + 1;
+    const endPage = Math.min(currentGroup * maxButtons, totalPages);
+
+    if (currentGroup > 1) {
+      buttons.push(
+          <button key="prev-group" onClick={() => setPage(startPage - 1)}>
+            &laquo;
+          </button>
+      );
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       buttons.push(
           <button key={i} onClick={() => setPage(i)} className={page === i ? 'active' : ''}>
             {i}
           </button>
       );
     }
+
+    if (currentGroup < totalGroups) {
+      buttons.push(
+          <button key="next-group" onClick={() => setPage(endPage + 1)}>
+            &raquo;
+          </button>
+      );
+    }
+
     return buttons;
   };
 
@@ -109,7 +134,12 @@ const CommentSection = ({ postId }) => {
               onChange={(e) => setNewComment(e.target.value)}
               disabled={!token} // 로그인 안된 상태면 입력 비활성화
           />
-          <button type="submit" className="comment-submit" disabled={!token}>게시</button>
+          <button
+              type="submit"
+              className="comment-submit"
+          >
+            게시
+          </button>
         </form>
       </div>
   );
