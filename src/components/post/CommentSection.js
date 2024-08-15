@@ -74,7 +74,7 @@ const CommentSection = ({ postId }) => {
           {comments.length > 0 ? (
               comments.map((comment, index) => {
                 const profileImageUrl = comment.profileImage
-                    ? `https://today-space.s3.ap-northeast-2.amazonaws.com/${comment.profileImage}`
+                    ? `${comment.profileImage}`
                     : 'https://via.placeholder.com/36';
 
                 return (

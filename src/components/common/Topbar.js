@@ -40,6 +40,7 @@ function Topbar() {
               if (res.data.statusCode === 200) {
 
                 localStorage.removeItem('accessToken');
+                localStorage.removeItem('username');
                 dispatch(setIsLogin(false));
         
               }
@@ -49,8 +50,20 @@ function Topbar() {
 
           }
         }).catch( (err) => {
-          console.log("토큰 재발급 실패: ", err);
+          if (err.response.data.statusCode === 401) {
+
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('username');
+            dispatch(setIsLogin(false));
+            
+          }
         });
+
+      } else if (err.response.data.statusCode === 401) {
+
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
+        dispatch(setIsLogin(false));
 
       }
     });

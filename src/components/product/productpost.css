@@ -224,10 +224,11 @@ textarea {
   color: #999;
 }
 
-#reviewBtn, button {
+.reviewBtn {
+  font-size: 18px;
+  text-align: center;
   display: inline-block;
   padding: 10px 20px;
-  font-size: 14px;
   color: #fff;
   background-color: #007bff;
   border: none;
@@ -236,7 +237,12 @@ textarea {
   transition: background-color 0.3s ease;
 }
 
-#reviewBtn:hover, button:hover {
+.reviewBtn-post{
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.reviewBtn:hover {
   background-color: #0056b3;
 }
 
