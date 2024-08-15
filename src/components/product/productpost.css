@@ -242,7 +242,7 @@ textarea {
   margin-bottom: 20px;
 }
 
-#reviewBtn:hover {
+.reviewBtn:hover {
   background-color: #0056b3;
 }
 
