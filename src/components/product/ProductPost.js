@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import AWS from 'aws-sdk';
 import axios from "axios";
 import "./productpost.css";
@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function ProductPost() {
   const { id } = useParams();
-  const [productContent, setProductContent] = useState('');
   const [productImage, setProductImage] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imageError, setImageError] = useState('');
@@ -43,12 +42,41 @@ function ProductPost() {
     }
   };
 
-  const handleFileChange = (event) => {
+  useEffect(() => {
+    if (id) {
+      axios.get(`${process.env.REACT_APP_API_URL}/v1/products/${id}`)
+      .then(response => {
+        const data = response.data.data;
+        setProduct({
+          title: data.title,
+          price: data.price,
+          content: data.content,
+          address: data.address,
+          state: data.state
+        });
+        setProductImage(data.images.map(img => img.imagePath));
+      })
+      .catch(error => {
+        console.error('Error fetching product data:', error);
+      });
+    }
+  }, [id]);
+
+  const handleFileChange = async (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.map(file => URL.createObjectURL(file));
-    setProductImage(prevImages => [...prevImages, ...newImages]);
-    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
-    setImageError('');
+    const uploadedImages = [];
+
+    for (let file of files) {
+      try {
+        const uploadedImageUrl = await uploadToS3(file);
+        uploadedImages.push(uploadedImageUrl);
+      } catch (error) {
+        console.error('S3 업로드 실패:', error);
+      }
+    }
+
+    setProductImage(prevImages => [...prevImages, ...uploadedImages]);
+    setSelectedFiles([]);  // 이미지가 S3에 업로드되면 더 이상 로컬에서 사용할 필요가 없으므로 초기화
   };
 
   const handleInputChange = (e) => {
@@ -60,40 +88,34 @@ function ProductPost() {
   };
 
   const removeImage = (url) => {
-    const index = productImage.indexOf(url);
-    if (index > -1) {
-      const updatedImages = productImage.filter(image => image !== url);
-      setProductImage(updatedImages);
-      setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+    const updatedImages = productImage.filter(image => image !== url);
+    setProductImage(updatedImages);
+  };
+
+  const handleCancel = () => {
+    if (id) {
+      navigate(`/product/${id}`);
+    } else {
+      navigate("/product");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (selectedFiles.length === 0) {
-      setImageError('이미지를 최소 1장 이상 업로드해야 합니다.');
+    if (productImage.length === 0) {
+      setImageError('사진을 최소 1장 이상 업로드해야 합니다.');
       return;
     }
 
-    if (selectedFiles.length > 5) {
-      setImageError('이미지는 최대 5장까지 업로드할 수 있습니다.');
-      return;
-    }
+    const updatedProduct = {
+      ...product,
+      images: productImage, // 업로드된 이미지 URL들만 포함
+    };
+
+    const token = localStorage.getItem('accessToken');
 
     try {
-      // S3에 이미지 업로드 및 URL 획득
-      const imageUrls = await Promise.all(
-          selectedFiles.map(file => uploadToS3(file))
-      );
-
-      const updatedProduct = {
-        ...product,
-        images: imageUrls, // S3 URL들을 product 객체에 추가
-      };
-
-      const token = localStorage.getItem('accessToken');
-
       let response;
       if (id) {
         response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/products/${id}`, updatedProduct, {
@@ -116,15 +138,14 @@ function ProductPost() {
         navigate("/product");
       }
     } catch (error) {
-      console.error("Error during product submission:", error);
-      // 추가적인 에러 처리 로직 (토큰 만료 처리 등)
+      console.error("상품 제출 중 오류 발생:", error);
     }
   };
 
   return (
       <div className="productpost-container">
         <h1>{id ? '상품 판매글 수정' : '상품 판매글 등록'}</h1>
-        <form onSubmit={handleSubmit} method="POST">
+        <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
           <div className="form-group">
             <label htmlFor="title">상품명</label>
             <textarea
@@ -199,33 +220,30 @@ function ProductPost() {
           </div>
           <div className="form-group">
             <label htmlFor="post-image">이미지</label>
-            {id ? (
-                <>
-                  <div className="image-preview">
-                    {productImage.map((image, index) => (
-                        <div key={index} className="image-container">
-                          <img src={image} alt={`preview ${index}`}/>
-                        </div>
-                    ))}
+            <div className="image-preview">
+              {productImage.map((image, index) => (
+                  <div key={index} className="image-container">
+                    <img src={image} alt={`preview ${index}`} />
+                    {!id && (
+                        <button
+                            type="button"
+                            className="remove-button"
+                            onClick={() => removeImage(image)}
+                        >
+                          X
+                        </button>
+                    )}
                   </div>
-                  <small>* 이미지 수정 불가능</small>
-                </>
-            ) : (
+              ))}
+            </div>
+            {!id && (
                 <>
-                  <div className="image-preview">
-                    {productImage.map((image, index) => (
-                        <div key={index} className="image-container">
-                          <img src={image} alt={`preview ${index}`}/>
-                          <button type="button" className="remove-button"
-                                  onClick={() => removeImage(image)}>X
-                          </button>
-                        </div>
-                    ))}
-                  </div>
                   <div className="file-input-wrapper">
-                    <button type="button" className="btn-file-input"
-                            onClick={() => document.getElementById(
-                                'post-image').click()}>
+                    <button
+                        type="button"
+                        className="btn-file-input"
+                        onClick={() => document.getElementById("post-image").click()}
+                    >
                       이미지 선택
                     </button>
                     <input
@@ -235,7 +253,7 @@ function ProductPost() {
                         accept="image/*"
                         multiple
                         onChange={handleFileChange}
-                        style={{display: 'none'}}
+                        style={{ display: "none" }}
                     />
                   </div>
                   <small>* 최대 5장까지 등록 가능합니다.</small>
@@ -243,10 +261,18 @@ function ProductPost() {
             )}
           </div>
           <div className="form-actions">
-            <button type="submit" className="submit-button">{id ? '수정하기'
-                : '등록하기'}</button>
-            <button type="button" className="cancel-button"
-                    onClick={() => navigate("/product")}>취소
+            <button
+                type="submit"
+                className="submit-button"
+            >
+              {id ? "수정하기" : "등록하기"}
+            </button>
+            <button
+                type="button"
+                className="cancel-button"
+                onClick={handleCancel}
+            >
+              취소
             </button>
           </div>
         </form>
