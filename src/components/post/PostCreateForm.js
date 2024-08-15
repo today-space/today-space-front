@@ -39,9 +39,14 @@ function PostCreateForm() {
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     const newImages = files.map(file => URL.createObjectURL(file));
+
+    if (images.length + newImages.length > 5) {
+      alert('이미지는 최대 5장까지 업로드할 수 있습니다.');
+      return;
+    }
+
     setImages(prevImages => [...prevImages, ...newImages]);
     setSelectedFiles(prevFiles => [...prevFiles, ...files]);
-    setImageError(''); 
   };
 
   const handleContentChange = (event) => {
@@ -62,7 +67,11 @@ function PostCreateForm() {
       event.preventDefault();
       const newTag = event.target.value.trim();
       if (newTag && !postHashtags.includes(newTag)) {
-        setPostHashtags([...postHashtags, newTag]);
+        if (postHashtags.length < 5) {
+          setPostHashtags([...postHashtags, newTag]);
+        } else {
+          alert('태그는 최대 5개까지 등록할 수 있습니다.');
+        }
       }
       event.target.value = '';
     }
