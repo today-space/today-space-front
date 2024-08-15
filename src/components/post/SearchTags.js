@@ -13,14 +13,10 @@ const SearchTags = ({ onTagClick, selectedTag }) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/hashtags`);
       const data = response.data.data;
-      setTags(['전체', ...data]); // '#전체' 태그를 목록의 처음에 추가
+      setTags(['전체', ...data]); // '전체' 태그를 목록의 처음에 추가
     } catch (error) {
       console.error('Error fetching top tags', error);
     }
-  };
-
-  const handleTagClick = (tag) => {
-    onTagClick(tag);
   };
 
   return (
@@ -31,8 +27,9 @@ const SearchTags = ({ onTagClick, selectedTag }) => {
                 <span
                     key={index}
                     className={`search-tag ${selectedTag === tag ? 'selected' : ''}`}
-                    onClick={() => handleTagClick(tag)}
-                    style={{ cursor: 'pointer' }}>
+                    onClick={() => onTagClick(tag)}
+                    style={{ cursor: 'pointer' }}
+                >
               #{tag}
             </span>
             ))}

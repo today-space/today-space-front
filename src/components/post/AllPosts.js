@@ -3,6 +3,8 @@ import axios from 'axios';
 import PostItem from "./PostItem";
 import CommentSection from "./CommentSection";
 import './post.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function AllPosts({ selectedTag, onTagClick }) {
   const [posts, setPosts] = useState([]);
@@ -10,6 +12,7 @@ function AllPosts({ selectedTag, onTagClick }) {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    console.log('Fetching posts for selectedTag:', selectedTag);
     fetchPosts();
   }, [page, selectedTag]);
 
@@ -67,6 +70,7 @@ function AllPosts({ selectedTag, onTagClick }) {
                     postId={post.id}
                     onTagClick={onTagClick}
                     selectedTag={selectedTag}
+                    images={post.images}  // 이미지 배열을 전달
                 />
                 <CommentSection postId={post.id} />
               </div>
