@@ -8,7 +8,6 @@ function ProductPost() {
   const { id } = useParams();
   const [productImage, setProductImage] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [imageError, setImageError] = useState('');
   const navigate = useNavigate();
   const [product, setProduct] = useState({
     title: '',
@@ -64,6 +63,12 @@ function ProductPost() {
 
   const handleFileChange = async (event) => {
     const files = Array.from(event.target.files);
+
+    if (productImage.length + files.length > 5) {
+      alert('이미지는 최대 5장까지 업로드할 수 있습니다.');
+      return;
+    }
+
     const uploadedImages = [];
 
     for (let file of files) {
@@ -104,7 +109,7 @@ function ProductPost() {
     e.preventDefault();
 
     if (productImage.length === 0) {
-      setImageError('사진을 최소 1장 이상 업로드해야 합니다.');
+      alert('사진을 최소 1장 이상 업로드해야 합니다.');
       return;
     }
 
