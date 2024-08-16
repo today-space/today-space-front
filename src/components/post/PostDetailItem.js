@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Slider from 'react-slick';
+import { SamplePrevArrow, SampleNextArrow } from './SliderArrows';
 import './post.css';
 
-function PostDetailItem({ profileImage, nickname, postImage, likeCount, content, date, tags, postId, onTagClick }) {
+function PostDetailItem({ profileImage, nickname, likeCount, content, date, tags, postId, onTagClick, images }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(likeCount);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const token = localStorage.getItem('accessToken');
   const currentUsername = localStorage.getItem('username');
   const navigate = useNavigate();
@@ -54,16 +57,39 @@ function PostDetailItem({ profileImage, nickname, postImage, likeCount, content,
     navigate(`/post/edit/${postId}`);
   };
 
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    prevArrow: currentSlide !== 0 && <SamplePrevArrow />,
+    nextArrow: currentSlide !== images.length - 1 && <SampleNextArrow />,
+    beforeChange: (oldIndex, newIndex) => setCurrentSlide(newIndex),
+    adaptiveHeight: true,
+  };
+
+  const fullProfileImageUrl = profileImage ? `${profileImage}` : 'https://via.placeholder.com/36';
+
   return (
       <div className="left-content">
         <div className="post-header">
           <div className="post-title">
-            <img src={profileImage} alt="프로필 이미지" className="profile-image" />
+            <img src={fullProfileImageUrl} alt="프로필 이미지" className="profile-image" />
             {nickname}
           </div>
           {currentUsername === nickname && <button className="edit-button" onClick={handleEditClick}>편집</button>}
         </div>
-        <img src={postImage} alt="포스트 이미지" className="post-image" />
+
+        <Slider {...settings} className="post-image-slider">
+          {images.map((image, index) => (
+              <div key={index}>
+                <img src={image.imagePath} alt={`포스트 이미지 ${index + 1}`} className="post-image" />
+              </div>
+          ))}
+        </Slider>
+
         <div className="post-actions">
           <button className="like-button" onClick={handleLikeToggle}>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={isLiked ? 'red' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -72,6 +98,7 @@ function PostDetailItem({ profileImage, nickname, postImage, likeCount, content,
             좋아요 {likes}
           </button>
         </div>
+
         <div className="post-content">
           <p><span className="nickname">{nickname}</span> {content}</p>
         </div>

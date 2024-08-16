@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Slider from 'react-slick';
+import { SamplePrevArrow, SampleNextArrow } from './SliderArrows';
 import './post.css';
 
-const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date, tags, postId, onTagClick, selectedTag }) => {
+const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date, tags, postId, onTagClick, selectedTag, images }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(likeCount);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const token = localStorage.getItem('accessToken');
-  const currentUsername = localStorage.getItem('username'); // localStorage에서 현재 사용자의 username을 가져옴
+  const currentUsername = localStorage.getItem('username');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
           Authorization: token,
         },
       });
-      setIsLiked(response.data.data.isLiked);  // 'data' 속성의 경로가 올바른지 확인
+      setIsLiked(response.data.data.isLiked);
     } catch (error) {
       console.error('Error checking like status', error);
     }
@@ -43,8 +46,8 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
           Authorization: token,
         },
       });
-      setIsLiked(response.data.data.isLiked);  // 'data' 속성의 경로가 올바른지 확인
-      setLikes(response.data.data.likeCount);  // 'data' 속성의 경로가 올바른지 확인
+      setIsLiked(response.data.data.isLiked);
+      setLikes(response.data.data.likeCount);
     } catch (error) {
       console.error('Error toggling like', error);
     }
@@ -52,6 +55,19 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
 
   const handleEditClick = () => {
     navigate(`/post/edit/${postId}`);
+  };
+
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    prevArrow: currentSlide !== 0 && <SamplePrevArrow />,
+    nextArrow: currentSlide !== images.length - 1 && <SampleNextArrow />,
+    beforeChange: (oldIndex, newIndex) => setCurrentSlide(newIndex),
+    adaptiveHeight: true,
   };
 
   const fullProfileImageUrl = profileImage ? `${profileImage}` : 'https://via.placeholder.com/36';
@@ -66,7 +82,13 @@ const PostItem = ({ profileImage, nickname, postImage, likeCount, content, date,
           {currentUsername === nickname && <button className="edit-button" onClick={handleEditClick}>편집</button>}
         </div>
 
-        <img src={postImage} alt="포스트 이미지" className="post-image" />
+        <Slider {...settings} className="post-image-slider">
+          {images.map((image, index) => (
+              <div key={index}>
+                <img src={image.imagePath} alt={`포스트 이미지 ${index + 1}`} className="post-image" />
+              </div>
+          ))}
+        </Slider>
 
         <div className="post-actions">
           <button className="like-button" onClick={handleLikeToggle}>

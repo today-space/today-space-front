@@ -3,6 +3,8 @@ import axios from 'axios';
 import PostItem from "./PostItem";
 import CommentSection from "./CommentSection";
 import './post.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function AllPosts({ selectedTag, onTagClick }) {
   const [posts, setPosts] = useState([]);
@@ -10,6 +12,7 @@ function AllPosts({ selectedTag, onTagClick }) {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    console.log('Fetching posts for selectedTag:', selectedTag);
     fetchPosts();
   }, [page, selectedTag]);
 
@@ -29,21 +32,32 @@ function AllPosts({ selectedTag, onTagClick }) {
   const getPaginationButtons = () => {
     const buttons = [];
     const maxButtons = 5;
-    const halfMaxButtons = Math.floor(maxButtons / 2);
+    const currentGroup = Math.ceil(page / maxButtons);
+    const totalGroups = Math.ceil(totalPages / maxButtons);
 
-    let startPage = Math.max(1, page - halfMaxButtons);
-    let endPage = Math.min(totalPages, page + halfMaxButtons);
+    const startPage = (currentGroup - 1) * maxButtons + 1;
+    const endPage = Math.min(currentGroup * maxButtons, totalPages);
 
-    if (endPage - startPage + 1 < maxButtons) {
-      const diff = maxButtons - (endPage - startPage + 1);
-      startPage = Math.max(1, startPage - diff);
-      endPage = Math.min(totalPages, endPage + diff);
+    if (currentGroup > 1) {
+      buttons.push(
+          <button key="prev-group" onClick={() => setPage(startPage - 1)}>
+            &laquo;
+          </button>
+      );
     }
 
     for (let i = startPage; i <= endPage; i++) {
       buttons.push(
           <button key={i} onClick={() => setPage(i)} className={page === i ? 'active' : ''}>
             {i}
+          </button>
+      );
+    }
+
+    if (currentGroup < totalGroups) {
+      buttons.push(
+          <button key="next-group" onClick={() => setPage(endPage + 1)}>
+            &raquo;
           </button>
       );
     }
@@ -67,6 +81,7 @@ function AllPosts({ selectedTag, onTagClick }) {
                     postId={post.id}
                     onTagClick={onTagClick}
                     selectedTag={selectedTag}
+                    images={post.images}  // 이미지 배열을 전달
                 />
                 <CommentSection postId={post.id} />
               </div>
