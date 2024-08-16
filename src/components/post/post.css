@@ -106,14 +106,6 @@
   object-fit: cover;
 }
 
-.post-image {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
 .post-content {
   line-height: 1.6;
   margin-bottom: 20px;
@@ -143,7 +135,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 20px 0px;
 }
 
 .like-button {
@@ -320,4 +312,31 @@
 .nickname {
   font-weight: bold;
   margin-right: 10px;
+}
+
+.post-image-slider {
+  width: 100%;
+  max-width: 800px;
+  height: 500px; /* 슬라이더 전체 높이를 고정 */
+  margin: 0 auto; /* 슬라이더를 가운데로 정렬 */
+  padding-bottom: 40px; /* slick-dots를 위한 여백 추가 */
+  position: relative; /* slick-dots 위치 조정을 위해 relative로 설정 */
+}
+
+.post-image {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  /*object-fit: contain; !* 이미지 비율을 유지하면서 슬라이더에 맞춤 *!*/
+  object-position: center; /* 이미지를 중앙에 배치 */
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.slick-dots {
+  position: absolute;
+  bottom: -30px; /* 이미지 바깥에 위치하도록 조정 */
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

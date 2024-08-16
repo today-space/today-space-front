@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import PostDetailItem from './PostDetailItem';
 import CommentSection from './CommentSection';
 import './post.css';
@@ -8,24 +8,26 @@ import './post.css';
 function PostDetail() {
   const [post, setPost] = useState({});
   const { id } = useParams();
+  const navigate = useNavigate(); // useNavigate 추가
 
   useEffect(() => {
     if (id) {
       axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${id}`)
       .then((res) => {
         if (res.data.statusCode === 200) {
-          console.log("res.data.data : ", res.data.data);
-          console.log("test", res.data.data.hashtags);
-          res.data.data.hashtags.map(tag => tag.hashtagName);
           setPost(res.data.data);
         }
       }).catch((err) => {
-        console.log("err : ", err);
+        console.error("Error fetching post data", err);
       });
     }
   }, [id]);
 
-  const postImage = post.images && post.images.length > 0 ? post.images[0].imagePath : 'https://via.placeholder.com/800x500?text=이미지+없음';
+  const handleTagClick = (tag) => {
+    navigate(`/post?tag=${encodeURIComponent(tag.hashtagName)}`); 
+  };
+
+  const images = post.images || [];
 
   return (
       <div className="container">
@@ -34,13 +36,13 @@ function PostDetail() {
             <PostDetailItem
                 profileImage={post.profileImage ? `${post.profileImage}` : 'https://via.placeholder.com/36'}
                 nickname={post.nickname || '익명'}
-                postImage={postImage}
                 likeCount={post.likeCount}
                 content={post.content}
                 date={new Date(post.updatedAt).toLocaleDateString()}
                 tags={post.hashtags}
                 postId={post.id}
-                onTagClick={null}
+                onTagClick={handleTagClick}
+                images={images}
             />
             <CommentSection postId={post.id} />
           </div>

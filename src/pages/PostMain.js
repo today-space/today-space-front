@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Topbar from "../components/common/Topbar";
 import SearchTags from '../components/post/SearchTags';
 import AddPostButton from '../components/post/AddPostButton';
@@ -8,6 +8,7 @@ import './page.css';
 
 function PostMain() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem('accessToken');
   const [selectedTag, setSelectedTag] = useState('전체'); // 초기 상태를 '전체'로 설정
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,6 +16,12 @@ function PostMain() {
   useEffect(() => {
     setIsLoggedIn(!!token); // 토큰이 있으면 로그인 상태로 설정
   }, [token]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const tag = queryParams.get('tag') || '전체';
+    setSelectedTag(tag);
+  }, [location]);
 
   const handlePostClick = () => {
     if (isLoggedIn) {
@@ -25,7 +32,9 @@ function PostMain() {
   };
 
   const handleTagClick = (tag) => {
+    console.log('Clicked tag:', tag);
     setSelectedTag(tag);
+    navigate(`/post?tag=${encodeURIComponent(tag)}`);
   };
 
   return (

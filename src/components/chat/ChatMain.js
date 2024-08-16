@@ -212,7 +212,7 @@ function ChatMain() {
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleSenderEnter}
+                onKeyUp={handleSenderEnter}
                 placeholder="메시지를 입력하세요."
               />
 
