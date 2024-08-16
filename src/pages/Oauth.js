@@ -17,12 +17,13 @@ function Oauth() {
 
     if (params.id === "kakao") {
       if (code) {
-        axios.get(`${process.env.REACT_APP_API_URL}/v1/kakao/callback?code=${code}`, {
-          withCredentials: true
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/kakao/login`, {
+          code: code
         }).then( (res) => {
           if (res.data.statusCode === 200) {
 
-            localStorage.setItem("accessToken", res.headers.authorization);
+            localStorage.setItem("accessToken", res.data.data.accessToken);
+            localStorage.setItem("username", res.data.data.username);
             dispatch(setIsLogin(true));
             navigate("/");
 
@@ -35,12 +36,13 @@ function Oauth() {
 
     if (params.id === "naver") {
       if (code && state) {
-        axios.get(`${process.env.REACT_APP_API_URL}/v1/naver/callback?code=${code}`, {
-          withCredentials: true
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/naver/login`, {
+          code: code
         }).then( (res) => {
           if (res.data.statusCode === 200) {
 
-            localStorage.setItem("accessToken", res.headers.authorization);
+            localStorage.setItem("accessToken", res.data.data.accessToken);
+            localStorage.setItem("username", res.data.data.username);
             dispatch(setIsLogin(true));
             navigate("/");
 
@@ -53,12 +55,13 @@ function Oauth() {
 
     if (params.id === "google") {
       if (code) {
-        axios.get(`${process.env.REACT_APP_API_URL}/v1/google/callback?code=${code}`, {
-          withCredentials: true
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/google/login`, {
+          code: code
         }).then( (res) => {
           if (res.data.statusCode === 200) {
 
-            localStorage.setItem("accessToken", res.headers.authorization);
+            localStorage.setItem("accessToken", res.data.data.accessToken);
+            localStorage.setItem("username", res.data.data.username);
             dispatch(setIsLogin(true));
             navigate("/");
 

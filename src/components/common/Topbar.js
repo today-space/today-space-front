@@ -21,6 +21,7 @@ function Topbar() {
       if (res.data.statusCode === 200) {
 
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
         dispatch(setIsLogin(false));
 
       }
