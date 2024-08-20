@@ -110,6 +110,8 @@ const ProductMain = () => {
       setRegionOption('ALL')
     } else if (value === 'GYEONGGI') {
       setRegionOption('GYEONGGI')
+    }else if (value === 'SEOUL') {
+      setRegionOption('SEOUL')
     }else if (value === 'GANGWON') {
       setRegionOption('GANGWON')
     }else if (value === 'CHUNGCHEONGBUK') {

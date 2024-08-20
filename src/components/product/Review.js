@@ -21,14 +21,45 @@ function Review({ productData, id }) {
           }
       );
       console.log(response);
-      setIsReviewing(false); // 리뷰 제출 후 모달 닫기
+      setIsReviewing(false);
     } catch (error) {
-      if(error.response.data.statusCode === 409){
-        alert(error.response.data.message);
+
+      if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
+        try {
+          const refreshResponse = await axios.post(
+              `${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+                withCredentials: true,
+              });
+
+          if (refreshResponse.data.statusCode === 200) {
+            const newAccessToken = refreshResponse.headers.authorization;
+            localStorage.setItem("accessToken", newAccessToken);
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/v1/products/${id}/reviews`,
+                {content: reviewContent},
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': newAccessToken,
+                  },
+                }
+            );
+            console.log(response);
+            setIsReviewing(false);
+          }
+        } catch (refreshError) {
+          console.log("토큰 재발급 실패: ", refreshError);
+        }
+      } else {
+
+        console.error('오류', error);
+        if (error.response.data.statusCode === 409) {
+          alert(error.response.data.message);
+        }
       }
-      console.log(error);
     }
-  };
+  }
 
   const handleInputChange = (event) => {
     setReviewContent(event.target.value);
@@ -38,7 +69,6 @@ function Review({ productData, id }) {
       <div>
         <button
             className="reviewBtn reviewBtn-post"
-            // id="reviewBtn"
             onClick={() => setIsReviewing(true)}
         >
           후기 작성
