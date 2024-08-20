@@ -1,13 +1,42 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './post.css';
+
+// 토큰과 관련된 유틸리티 함수
+const getAccessToken = () => localStorage.getItem('accessToken');
+
+const refreshAccessToken = async () => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, { withCredentials: true });
+    const newAccessToken = response.headers.authorization;
+    localStorage.setItem('accessToken', newAccessToken);
+    return newAccessToken;
+  } catch (error) {
+    console.error('토큰 재발급 실패:', error);
+    throw error;
+  }
+};
+
+const requestWithTokenRefresh = async (config) => {
+  const accessToken = getAccessToken();
+  config.headers = { ...config.headers, Authorization: accessToken };
+  try {
+    return await axios(config);
+  } catch (error) {
+    if (error.response && error.response.data.message === '토큰이 만료되었습니다.') {
+      const newAccessToken = await refreshAccessToken();
+      config.headers.Authorization = newAccessToken;
+      return await axios(config);
+    }
+    throw error;
+  }
+};
 
 const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     if (postId) {
@@ -17,21 +46,23 @@ const CommentSection = ({ postId }) => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`, {
+      const response = await requestWithTokenRefresh({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`,
         params: { page }
       });
       const data = response.data.data;
       setComments(data.content);
       setTotalPages(data.totalPages);
     } catch (error) {
-      console.error('Error fetching comments', error);
+      console.error('댓글 불러오기 오류:', error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!token) {
+    if (!getAccessToken()) {
       alert('로그인 후 댓글을 남길 수 있습니다.');
       return;
     }
@@ -39,20 +70,18 @@ const CommentSection = ({ postId }) => {
     if (!newComment.trim()) return;
 
     try {
-      await axios.post(
-          `${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`,
-          { content: newComment },
-          {
-            headers: {
-              Authorization: token,
-              'Content-Type': 'application/json',
-            },
-          }
-      );
+      await requestWithTokenRefresh({
+        method: 'POST',
+        url: `${process.env.REACT_APP_API_URL}/v1/posts/${postId}/comments`,
+        data: { content: newComment },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       setNewComment('');
-      fetchComments(); // Fetch updated comments
+      fetchComments();
     } catch (error) {
-      console.error('Error adding comment', error);
+      console.error('댓글 추가 오류:', error);
     }
   };
 
@@ -128,11 +157,11 @@ const CommentSection = ({ postId }) => {
         <form className="comment-form" onSubmit={handleSubmit}>
           <input
               type="text"
-              placeholder={token ? "댓글을 입력하세요..." : "로그인 후 댓글을 남길 수 있습니다."}
+              placeholder={getAccessToken() ? "댓글을 입력하세요..." : "로그인 후 댓글을 남길 수 있습니다."}
               className="comment-input"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              disabled={!token} // 로그인 안된 상태면 입력 비활성화
+              disabled={!getAccessToken()} 
           />
           <button
               type="submit"
