@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1837ba8d-2056-4d3e-8cc8-3c8de673d71d" name="Changes" comment="refactor : 게시글 전반 토큰 재발급" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="refactor/#110-post-token" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;rohtable&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/today-space/today-space-front.git&quot;,
+    &quot;accountId&quot;: &quot;0202ce72-9e19-47fe-9de9-286e7c95a835&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2k31zSWJpD24Py13OpltBm9nBOQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Node.js.AllPosts.js.executor": "Run",
+    "Node.js.App.js.executor": "Run",
+    "Node.js.CommentSection.js.executor": "Run",
+    "Node.js.PopularPosts.js.executor": "Run",
+    "Node.js.PostCreate.js.executor": "Run",
+    "Node.js.PostCreateForm.js.executor": "Run",
+    "Node.js.PostDetail.js.executor": "Run",
+    "Node.js.PostEditForm.js.executor": "Run",
+    "Node.js.PostItem.js.executor": "Run",
+    "Node.js.PostMain.js.executor": "Run",
+    "Node.js.ProductPost.js.executor": "Run",
+    "Node.js.Profile.js.executor": "Run",
+    "Node.js.SearchTags.js.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/rohmac/Desktop/github/today-space-front",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1837ba8d-2056-4d3e-8cc8-3c8de673d71d" name="Changes" comment="" />
+      <created>1722497708889</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1722497708889</updated>
+      <workItem from="1722497710044" duration="81897000" />
+      <workItem from="1722755880321" duration="2138000" />
+      <workItem from="1722760443588" duration="6699000" />
+      <workItem from="1722843032083" duration="25948000" />
+      <workItem from="1723080526816" duration="122390000" />
+      <workItem from="1723729179705" duration="6900000" />
+      <workItem from="1723737185223" duration="59449000" />
+    </task>
+    <task id="LOCAL-00001" summary="feat : 커뮤니티 화면 연동">
+      <option name="closed" value="true" />
+      <created>1722556598870</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1722556598870</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat : 커뮤니티 화면 1차 수정">
+      <option name="closed" value="true" />
+      <created>1722618490438</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1722618490438</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat : 커뮤니티 화면 2차 수정">
+      <option name="closed" value="true" />
+      <created>1722741507117</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1722741507117</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat : 게시글 등록">
+      <option name="closed" value="true" />
+      <created>1722755665412</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722755665412</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix : 게시글 3차 수정(좋아요, 해시태그)">
+      <option name="closed" value="true" />
+      <created>1722763479509</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1722763479509</updated>
+    </task>
+    <task id="LOCAL-00006" summary="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정">
+      <option name="closed" value="true" />
+      <created>1723006303097</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1723006303097</updated>
+    </task>
+    <task id="LOCAL-00007" summary="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정">
+      <option name="closed" value="true" />
+      <created>1723007051789</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1723007051789</updated>
+    </task>
+    <task id="LOCAL-00008" summary="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정">
+      <option name="closed" value="true" />
+      <created>1723007869760</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1723007869760</updated>
+    </task>
+    <task id="LOCAL-00009" summary="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정">
+      <option name="closed" value="true" />
+      <created>1723009169519</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723009169519</updated>
+    </task>
+    <task id="LOCAL-00010" summary="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정">
+      <option name="closed" value="true" />
+      <created>1723045217698</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1723045217698</updated>
+    </task>
+    <task id="LOCAL-00011" summary="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정">
+      <option name="closed" value="true" />
+      <created>1723050286781</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1723050286781</updated>
+    </task>
+    <task id="LOCAL-00012" summary="update : 커뮤니티 이미지 여러장 노출">
+      <option name="closed" value="true" />
+      <created>1723140654301</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1723140654301</updated>
+    </task>
+    <task id="LOCAL-00013" summary="refactor : 프론트 S3 업로드 - Post">
+      <option name="closed" value="true" />
+      <created>1723426651491</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1723426651491</updated>
+    </task>
+    <task id="LOCAL-00014" summary="refactor : 프론트 S3 업로드 - Post">
+      <option name="closed" value="true" />
+      <created>1723426790091</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1723426790091</updated>
+    </task>
+    <task id="LOCAL-00015" summary="refactor : 프론트 S3 업로드 - Post">
+      <option name="closed" value="true" />
+      <created>1723445406448</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1723445406448</updated>
+    </task>
+    <task id="LOCAL-00016" summary="refactor : 프론트 S3 업로드 - Post">
+      <option name="closed" value="true" />
+      <created>1723614291408</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1723614291408</updated>
+    </task>
+    <task id="LOCAL-00017" summary="refactor : 프론트 S3 업로드 - user">
+      <option name="closed" value="true" />
+      <created>1723617483606</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1723617483606</updated>
+    </task>
+    <task id="LOCAL-00018" summary="fix : 프론트 프로필 이미지 Url 수정">
+      <option name="closed" value="true" />
+      <created>1723624076262</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1723624076262</updated>
+    </task>
+    <task id="LOCAL-00019" summary="fix : 상품 수정,삭제 오류 수정">
+      <option name="closed" value="true" />
+      <created>1723637783905</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1723637783905</updated>
+    </task>
+    <task id="LOCAL-00020" summary="fix : 상품 수정,삭제 오류 수정">
+      <option name="closed" value="true" />
+      <created>1723637875372</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1723637875372</updated>
+    </task>
+    <task id="LOCAL-00021" summary="fix : 게시글 이미지 슬라이드 처리, 단건 페이지 해시태그 조회 연결">
+      <option name="closed" value="true" />
+      <created>1723745380386</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1723745380386</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix : 태그, 이미지 5개 제한 오류 수정">
+      <option name="closed" value="true" />
+      <created>1723745801309</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1723745801309</updated>
+    </task>
+    <task id="LOCAL-00023" summary="fix : 커뮤니티,댓글 5페이지 이상 시, ui 수정">
+      <option name="closed" value="true" />
+      <created>1723745964125</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1723745964125</updated>
+    </task>
+    <task id="LOCAL-00024" summary="fix : 커뮤니티,댓글 5페이지 이상 시, ui 수정">
+      <option name="closed" value="true" />
+      <created>1723747030399</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1723747030399</updated>
+    </task>
+    <task id="LOCAL-00025" summary="fix : 상품 이미지 갯수 제한">
+      <option name="closed" value="true" />
+      <created>1723773908754</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1723773908754</updated>
+    </task>
+    <task id="LOCAL-00026" summary="fix : 댓글 시간 서울 기준으로 수정">
+      <option name="closed" value="true" />
+      <created>1723801040893</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1723801040893</updated>
+    </task>
+    <task id="LOCAL-00027" summary="refactor : 게시글 전반 토큰 재발급">
+      <option name="closed" value="true" />
+      <created>1724130914250</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1724130914250</updated>
+    </task>
+    <task id="LOCAL-00028" summary="refactor : 게시글 전반 토큰 재발급">
+      <option name="closed" value="true" />
+      <created>1724131155015</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1724131155015</updated>
+    </task>
+    <task id="LOCAL-00029" summary="refactor : 게시글 전반 토큰 재발급">
+      <option name="closed" value="true" />
+      <created>1724208570670</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1724208570670</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat : 커뮤니티 화면 연동" />
+    <MESSAGE value="feat : 커뮤니티 화면 1차 수정" />
+    <MESSAGE value="feat : 커뮤니티 화면 2차 수정" />
+    <MESSAGE value="feat : 게시글 등록" />
+    <MESSAGE value="fix : 게시글 3차 수정(좋아요, 해시태그)" />
+    <MESSAGE value="style : 게시글 해시태그 수정,삭제 Ui 수정/해시태그Top10 Ui 수정" />
+    <MESSAGE value="update : 커뮤니티 이미지 여러장 노출" />
+    <MESSAGE value="refactor : 프론트 S3 업로드 - Post" />
+    <MESSAGE value="refactor : 프론트 S3 업로드 - user" />
+    <MESSAGE value="fix : 프론트 프로필 이미지 Url 수정" />
+    <MESSAGE value="fix : 상품 수정,삭제 오류 수정" />
+    <MESSAGE value="fix : 게시글 이미지 슬라이드 처리, 단건 페이지 해시태그 조회 연결" />
+    <MESSAGE value="fix : 태그, 이미지 5개 제한 오류 수정" />
+    <MESSAGE value="fix : 커뮤니티,댓글 5페이지 이상 시, ui 수정" />
+    <MESSAGE value="fix : 상품 이미지 갯수 제한" />
+    <MESSAGE value="fix : 댓글 시간 서울 기준으로 수정" />
+    <MESSAGE value="refactor : 게시글 전반 토큰 재발급" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor : 게시글 전반 토큰 재발급" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
