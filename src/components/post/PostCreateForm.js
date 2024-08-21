@@ -4,6 +4,36 @@ import axios from 'axios';
 import './postCreateForm.css'; // 스타일을 위한 CSS 파일
 import { useNavigate } from 'react-router-dom';
 
+// 토큰과 관련된 유틸리티 함수
+const getAccessToken = () => localStorage.getItem('accessToken');
+
+const refreshAccessToken = async () => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, { withCredentials: true });
+    const newAccessToken = response.headers.authorization;
+    localStorage.setItem('accessToken', newAccessToken);
+    return newAccessToken;
+  } catch (error) {
+    console.error('토큰 재발급 실패:', error);
+    throw error;
+  }
+};
+
+const requestWithTokenRefresh = async (config) => {
+  const accessToken = getAccessToken();
+  config.headers = { ...config.headers, Authorization: accessToken };
+  try {
+    return await axios(config);
+  } catch (error) {
+    if (error.response && error.response.data.message === '토큰이 만료되었습니다.') {
+      const newAccessToken = await refreshAccessToken();
+      config.headers.Authorization = newAccessToken;
+      return await axios(config);
+    }
+    throw error;
+  }
+};
+
 function PostCreateForm() {
   const [postContent, setPostContent] = useState('');
   const [postHashtags, setPostHashtags] = useState([]);
@@ -106,11 +136,15 @@ function PostCreateForm() {
         images: imageUrls,
       };
 
-      const token = localStorage.getItem('accessToken');
+      const token = getAccessToken();
 
       const makePostRequest = async (token) => {
-        return await axios.post(`${process.env.REACT_APP_API_URL}/v1/posts`, formData, {
+        return await requestWithTokenRefresh({
+          method: 'POST',
+          url: `${process.env.REACT_APP_API_URL}/v1/posts`,
+          data: formData,
           headers: {
+            'Content-Type': 'application/json',
             'Authorization': token
           },
         });
