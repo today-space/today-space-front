@@ -138,7 +138,7 @@ const CommentSection = ({ postId }) => {
                         <div className="comment-author">{comment.username}</div>
                         <div className="comment-text">{comment.content}</div>
                         <div className="comment-actions">
-                          <span>{new Date(comment.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</span>
+                          <span>{new Date(comment.createdAt).toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
@@ -161,7 +161,7 @@ const CommentSection = ({ postId }) => {
               className="comment-input"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              disabled={!getAccessToken()} 
+              disabled={!getAccessToken()}
           />
           <button
               type="submit"
