@@ -4,6 +4,36 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import './postEditForm.css';
 
+// 토큰과 관련된 유틸리티 함수
+const getAccessToken = () => localStorage.getItem('accessToken');
+
+const refreshAccessToken = async () => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, { withCredentials: true });
+    const newAccessToken = response.headers.authorization;
+    localStorage.setItem('accessToken', newAccessToken);
+    return newAccessToken;
+  } catch (error) {
+    console.error('토큰 재발급 실패:', error);
+    throw error;
+  }
+};
+
+const requestWithTokenRefresh = async (config) => {
+  const accessToken = getAccessToken();
+  config.headers = { ...config.headers, Authorization: accessToken };
+  try {
+    return await axios(config);
+  } catch (error) {
+    if (error.response && error.response.data.message === '토큰이 만료되었습니다.') {
+      const newAccessToken = await refreshAccessToken();
+      config.headers.Authorization = newAccessToken;
+      return await axios(config);
+    }
+    throw error;
+  }
+};
+
 function PostEditForm() {
   const { postId } = useParams();
   const [postContent, setPostContent] = useState('');
@@ -11,15 +41,13 @@ function PostEditForm() {
   const [deletedHashtags, setDeletedHashtags] = useState([]);
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [deletedImages, setDeletedImages] = useState([]); // 추가된 부분
+  const [deletedImages, setDeletedImages] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem('accessToken'); // 추가된 부분
 
   useEffect(() => {
     if (!postId) {
-      console.log('Creating new post');
-      setIsLoaded(true); 
+      setIsLoaded(true);
       return;
     }
 
@@ -42,20 +70,18 @@ function PostEditForm() {
 
     try {
       const { Key } = await s3.upload(params).promise();
-      console.log('Uploaded file Key:', Key); // 업로드된 파일 Key 확인
-      return Key; // S3 URL 대신 Key 값만 반환
+      return Key;
     } catch (error) {
-      console.error('S3 업로드 실패:', error); // 업로드 실패 시 에러 로그
+      console.error('S3 업로드 실패:', error);
       throw error;
     }
   };
 
   const fetchPostData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/${postId}`, {
-        headers: {
-          Authorization: token,
-        },
+      const response = await requestWithTokenRefresh({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`,
       });
       const data = response.data.data;
       setPostContent(data.content);
@@ -66,7 +92,7 @@ function PostEditForm() {
       console.error('Error fetching post data', error);
     }
   };
-  
+
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     const newImages = files.map(file => URL.createObjectURL(file));
@@ -93,7 +119,7 @@ function PostEditForm() {
       }
     }
   };
-  
+
   const handleTagInput = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -121,67 +147,54 @@ function PostEditForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log('Selected Files:', selectedFiles);
-
-    const newImageKeys = await Promise.all(
-        selectedFiles.map((file) => uploadToS3(file))
-    );
-
-    console.log('Uploaded Image Keys:', newImageKeys);
-
-    const allImageKeys = [
-      ...images.filter((img) => !img.startsWith('blob:')),
-      ...newImageKeys,
-    ];
-
-    console.log('All Image Keys:', allImageKeys);
-    
-    const formData = {
-      content: postContent,
-      hashtags: postHashtags.map((tag) => tag.replace('#', '')),
-      deleteHashtags: deletedHashtags.map((tag) => tag.replace('#', '')),
-      images: allImageKeys,
-      deleteImageUrls: deletedImages,
-      newImages: newImageKeys 
-    };
-
-    console.log('Form Data being sent:', formData);
-
     try {
-      const response = await axios({
-        method: postId ? 'put' : 'post',
-        url: postId
-            ? `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`
-            : `${process.env.REACT_APP_API_URL}/v1/posts`,
+      const newImageKeys = await Promise.all(
+          selectedFiles.map((file) => uploadToS3(file))
+      );
+
+      const allImageKeys = [
+        ...images.filter((img) => !img.startsWith('blob:')),
+        ...newImageKeys,
+      ];
+
+      const formData = {
+        content: postContent,
+        hashtags: postHashtags.map((tag) => tag.replace('#', '')),
+        deleteHashtags: deletedHashtags.map((tag) => tag.replace('#', '')),
+        images: allImageKeys,
+        deleteImageUrls: deletedImages,
+        newImages: newImageKeys,
+      };
+
+      const method = postId ? 'put' : 'post';
+      const url = postId
+          ? `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`
+          : `${process.env.REACT_APP_API_URL}/v1/posts`;
+
+      const response = await requestWithTokenRefresh({
+        method,
+        url,
         data: formData,
-        headers: {
-          Authorization: token,
-        },
       });
 
-      if (response.status === 200) {
-        alert(`게시글이 성공적으로 ${postId ? '수정' : '생성'}되었습니다.`);
+      if (response.status === 200 || response.status === 201) {
+        alert(`게시글이 성공적으로 ${postId ? '수정' : '작성'}되었습니다.`);
         navigate('/post');
       } else {
-        alert(`게시글 ${postId ? '수정' : '생성'}에 실패했습니다.`);
+        alert(`게시글 ${postId ? '수정' : '작성'}에 실패했습니다.`);
       }
     } catch (error) {
       console.error(`Error ${postId ? 'updating' : 'creating'} post`, error);
-      alert(`게시글 ${postId ? '수정' : '생성'}에 실패했습니다.`);
+      alert(`게시글 ${postId ? '수정' : '작성'}에 실패했습니다.`);
     }
   };
 
-
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-          `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-      );
+      const response = await requestWithTokenRefresh({
+        method: 'DELETE',
+        url: `${process.env.REACT_APP_API_URL}/v1/posts/${postId}`,
+      });
 
       if (response.status === 200) {
         alert('게시글이 성공적으로 삭제되었습니다.');
