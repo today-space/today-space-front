@@ -138,7 +138,7 @@ const CommentSection = ({ postId }) => {
                         <div className="comment-author">{comment.username}</div>
                         <div className="comment-text">{comment.content}</div>
                         <div className="comment-actions">
-                          <span>{new Date(comment.createdAt).toLocaleString()}</span>
+                          <span>{new Date(comment.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</span>
                         </div>
                       </div>
                     </div>
