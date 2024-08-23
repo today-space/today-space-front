@@ -203,7 +203,6 @@ function Profile() {
         setIsModal(true);
       }
     }).catch((err) => {
-      console.log("err", err);
       if (err.response.data.message === "토큰이 만료되었습니다.") {
         axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
           withCredentials: true
@@ -228,6 +227,7 @@ function Profile() {
                 setNewMessage("입력값을 확인해주세요.");
                 return;
               }
+
               if (err.response.data.message === "사용 중인 아이디입니다.") {
                 setNewMessage("사용 중인 아이디입니다.");
                 return;
@@ -238,16 +238,23 @@ function Profile() {
           console.log("토큰 재발급 실패: ", err);
         });
       }
+
       if (err.response.data.message === "입력값을 확인해주세요.") {
         setNewMessage("입력값을 확인해주세요.");
         return;
       }
+      
       if (err.response.data.message === "사용 중인 아이디입니다.") {
         setNewMessage("사용 중인 아이디입니다.");
         return;
       }
+
     });
   };
+
+  const handleCancle = () => {
+    navigate("/mypage/post");
+  }
 
   const handleCheckModal = () => {
     setIsModal(false);
@@ -324,7 +331,7 @@ function Profile() {
 
         <div className="profile-container-button">
           <button className="profile-container-button-submit" onClick={handleSubmit}>변경 사항 저장</button>
-          <button className="profile-container-button-cancle">취소</button>
+          <button className="profile-container-button-cancle" onClick={handleCancle}>취소</button>
         </div>
 
         {isModal ? <CheckModal content={"아이디 변경이 완료되었습니다."} handler={handleCheckModal} /> : null}
