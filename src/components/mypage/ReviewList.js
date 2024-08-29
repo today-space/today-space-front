@@ -30,7 +30,6 @@ function ReviewList() {
         "Authorization": accessToken
       }
     }).then( (res) => {
-      console.log("test : ", res.data.data.content)
       if (res.data.statusCode === 200) {
         setData(res.data.data.content);
         setPageable({
