@@ -41,10 +41,7 @@ function Pagination({ itemsPerPage, pagePerDisplay, totalItems, totalPages, URL,
   }, [pageGroup]);
 
   useEffect( () => {
-
     setCurrentPage(initPage);
-    onChangePage(initPage);
-
   }, [initPage]);
 
   const handleClickPageNum = (e) => {
@@ -88,12 +85,13 @@ function Pagination({ itemsPerPage, pagePerDisplay, totalItems, totalPages, URL,
             </ul>
           : null}
  
-          <ul onClick={handleClickPageNum}>
+          <ul>
             {pageNumbers.map( (el) => {
               return <li 
                         key={el} 
                         className={currentPage === el ? "pagination-container-page-number-active" : "pagination-container-page-number"}
                         value={el}
+                        onClick={handleClickPageNum}
                       >
                         {el}
                       </li>
