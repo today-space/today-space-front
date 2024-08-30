@@ -160,3 +160,17 @@
 .pagination-container-icon:hover {
   color: var(--primary-color);
 }
+
+/* ---------- Loading.js ---------- */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-container > img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
