@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PostItem from "./PostItem";
 import CommentSection from "./CommentSection";
+import Loading from '../common/Loading';
 import './post.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,6 +41,7 @@ function AllPosts({ selectedTag, onTagClick }) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log('Fetching posts for selectedTag:', selectedTag);
@@ -56,6 +58,7 @@ function AllPosts({ selectedTag, onTagClick }) {
       const data = response.data.data;
       setPosts(data.content);
       setTotalPages(data.totalPages);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching posts', error);
     }
@@ -98,8 +101,11 @@ function AllPosts({ selectedTag, onTagClick }) {
   };
 
   return (
-      <div className="posts-container">
-        {posts.map((post) => (
+    <>
+      {isLoading 
+      ? <Loading />
+      : <div className="posts-container">
+          {posts.map((post) => (
             <div className="post-box" key={post.id}>
               <div className="content-wrapper">
                 <PostItem
@@ -118,11 +124,12 @@ function AllPosts({ selectedTag, onTagClick }) {
                 <CommentSection postId={post.id} />
               </div>
             </div>
-        ))}
-        <div className="pagination">
-          {getPaginationButtons()}
-        </div>
-      </div>
+          ))}
+          <div className="pagination">
+            {getPaginationButtons()}
+          </div>
+        </div>}
+    </>
   );
 }
 
