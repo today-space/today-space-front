@@ -13,6 +13,7 @@ const ProductMain = () => {
   const [totalPages, setTotalPages] = useState(undefined); // 총 페이지 수 상태
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDelayedLoading, setIsDelayedLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,8 +30,12 @@ const ProductMain = () => {
   };
 
 
-  const fetchProducts = async (page, sortOption, search,
-      regionOption) => {
+  const fetchProducts = async (page, sortOption, search, regionOption) => {
+    
+    const loadingTimeout = setTimeout( () => {
+      setIsDelayedLoading(true);
+    }, 1000);
+    
     try {
       const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/v1/products`, {
@@ -46,6 +51,7 @@ const ProductMain = () => {
       setProducts(response.data.data.content);
       setTotalPages(response.data.data.totalPages);
       setIsLoading(false);
+      clearTimeout(loadingTimeout);
       console.log('API 응답:', response.data);
       console.log('payment확인', response.data.data.content);
 
@@ -186,7 +192,7 @@ const ProductMain = () => {
             </select>
           </div>
         </div>
-        {isLoading 
+        {isLoading && isDelayedLoading
         ? <Loading />
         : <>
             <div className="grid">

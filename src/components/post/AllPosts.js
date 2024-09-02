@@ -42,6 +42,7 @@ function AllPosts({ selectedTag, onTagClick }) {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDelayedLoading, setIsDelayedLoading] = useState(false);
 
   useEffect(() => {
     console.log('Fetching posts for selectedTag:', selectedTag);
@@ -49,6 +50,11 @@ function AllPosts({ selectedTag, onTagClick }) {
   }, [page, selectedTag]);
 
   const fetchPosts = async () => {
+
+    const loadingTimeout = setTimeout( () => {
+      setIsDelayedLoading(true);
+    }, 1000);
+
     try {
       const response = await requestWithTokenRefresh({
         method: 'GET',
@@ -59,6 +65,7 @@ function AllPosts({ selectedTag, onTagClick }) {
       setPosts(data.content);
       setTotalPages(data.totalPages);
       setIsLoading(false);
+      clearTimeout(loadingTimeout);
     } catch (error) {
       console.error('Error fetching posts', error);
     }
@@ -102,7 +109,7 @@ function AllPosts({ selectedTag, onTagClick }) {
 
   return (
     <>
-      {isLoading 
+      {isLoading && isDelayedLoading
       ? <Loading />
       : <div className="posts-container">
           {posts.map((post) => (
