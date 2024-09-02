@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import "./productmain.css";
+import Loading from "../common/Loading";
 
 const ProductMain = () => {
   const [page, setPage] = useState(1); // 페이지 상태
@@ -11,6 +12,8 @@ const ProductMain = () => {
   const [products, setProducts] = useState([]); // 제품 목록 상태
   const [totalPages, setTotalPages] = useState(undefined); // 총 페이지 수 상태
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDelayedLoading, setIsDelayedLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,8 +30,12 @@ const ProductMain = () => {
   };
 
 
-  const fetchProducts = async (page, sortOption, search,
-      regionOption) => {
+  const fetchProducts = async (page, sortOption, search, regionOption) => {
+    
+    const loadingTimeout = setTimeout( () => {
+      setIsDelayedLoading(true);
+    }, 1000);
+    
     try {
       const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/v1/products`, {
@@ -43,6 +50,8 @@ const ProductMain = () => {
 
       setProducts(response.data.data.content);
       setTotalPages(response.data.data.totalPages);
+      setIsLoading(false);
+      clearTimeout(loadingTimeout);
       console.log('API 응답:', response.data);
       console.log('payment확인', response.data.data.content);
 
@@ -183,24 +192,28 @@ const ProductMain = () => {
             </select>
           </div>
         </div>
-        <div className="grid">
-          {products.map(product => (
-              <div
-                  key={product.id}
-                  className={`item ${product.paymentState ? 'paid' : ''}`}
-                  onClick={() => handlePostClick(product.id)}
-              >
-                <img src={product.imagePath} alt={product.title}/>
-                <div className="item-info">
-                  <h3>{product.title}</h3>
-                  <p className="item-price">{product.price}</p>
-                </div>
-              </div>
-          ))}
-        </div>
-        <div className="pagination">
-          {getPaginationButtons()}
-        </div>
+        {isLoading && isDelayedLoading
+        ? <Loading />
+        : <>
+            <div className="grid">
+              {products.map(product => (
+                  <div
+                      key={product.id}
+                      className={`item ${product.paymentState ? 'paid' : ''}`}
+                      onClick={() => handlePostClick(product.id)}
+                  >
+                    <img src={product.imagePath} alt={product.title}/>
+                    <div className="item-info">
+                      <h3>{product.title}</h3>
+                      <p className="item-price">{product.price}</p>
+                    </div>
+                  </div>
+              ))}
+            </div>
+            <div className="pagination">
+              {getPaginationButtons()}
+            </div>
+          </>}
       </div>
   );
 }
