@@ -25,7 +25,7 @@ function WishList() {
 
     const accessToken = localStorage.getItem("accessToken");
 
-    axios.get(`${process.env.REACT_APP_API_URL}/v1/my/wishs?page=${page}`, {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/wishes/my?page=${page}`, {
       headers: {
         "Authorization": accessToken
       }
@@ -50,7 +50,7 @@ function WishList() {
             const newAccessToken = res.headers.authorization;
             localStorage.setItem("accessToken", newAccessToken);
 
-            axios.get(`${process.env.REACT_APP_API_URL}/v1/my/wishs?page=${page}`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/v1/wishes/my?page=${page}`, {
               headers: {
                 "Authorization": newAccessToken
               }
