@@ -25,7 +25,7 @@ function PostList() {
 
     const accessToken = localStorage.getItem("accessToken");
 
-    axios.get(`${process.env.REACT_APP_API_URL}/v1/my/posts?page=${page}`, {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/my?page=${page}`, {
       headers: {
         "Authorization": accessToken
       }
@@ -50,7 +50,7 @@ function PostList() {
             const newAccessToken = res.headers.authorization;
             localStorage.setItem("accessToken", newAccessToken);
 
-            axios.get(`${process.env.REACT_APP_API_URL}/v1/my/posts?page=${page}`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/v1/posts/my?page=${page}`, {
               headers: {
                 "Authorization": newAccessToken
               }
