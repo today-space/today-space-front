@@ -15,7 +15,7 @@ function SellerInfo() {
 
   useEffect( () => {
 
-    axios.get(`${process.env.REACT_APP_API_URL}/v1/users/${id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/user/${id}`)
     .then( (res) => {
       if (res.data.statusCode === 200) {
         setUserInfo({

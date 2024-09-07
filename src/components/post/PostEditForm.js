@@ -9,7 +9,7 @@ const getAccessToken = () => localStorage.getItem('accessToken');
 
 const refreshAccessToken = async () => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, { withCredentials: true });
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, { withCredentials: true });
     const newAccessToken = response.headers.authorization;
     localStorage.setItem('accessToken', newAccessToken);
     return newAccessToken;

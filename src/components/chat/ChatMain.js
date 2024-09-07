@@ -31,7 +31,7 @@ function ChatMain() {
     }).catch( (err) => {
       if (err.response.data.message === "토큰이 만료되었습니다.") {
 
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
           withCredentials: true
         }).then( (res) => {
           if (res.data.statusCode === 200) {
@@ -80,7 +80,7 @@ function ChatMain() {
     }).catch( (err) => {
       if (err.response.data.message === "토큰이 만료되었습니다.") {
 
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
           withCredentials: true
         }).then( (res) => {
           if (res.data.statusCode === 200) {
