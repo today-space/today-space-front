@@ -40,7 +40,7 @@ function Payment({productData, id}) {
       }
       if (error.response && error.response.data.message === "토큰이 만료되었습니다.") {
         try {
-          const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+          const refreshResponse = await axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
             withCredentials: true
           });
 

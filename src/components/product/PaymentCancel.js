@@ -35,7 +35,7 @@ const PaymentCancel = () => {
           try {
 
             const refreshResponse = await axios.post(
-                `${process.env.REACT_APP_API_URL}/v1/auth/refresh`,
+                `${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`,
                 {},
                 { withCredentials: true }
             );

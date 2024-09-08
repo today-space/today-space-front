@@ -16,7 +16,7 @@ function Info() {
 
     const accessToken = localStorage.getItem("accessToken");
 
-    axios.get(`${process.env.REACT_APP_API_URL}/v1/my/profile`, {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/user/profile`, {
       headers: {
         "Authorization": accessToken
       }
@@ -30,7 +30,7 @@ function Info() {
     }).catch( (err) => {
       if (err.response.data.message === "토큰이 만료되었습니다.") {
 
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
           withCredentials: true
         }).then( (res) => {
           if (res.data.statusCode === 200) {
@@ -38,7 +38,7 @@ function Info() {
             const newAccessToken = res.headers.authorization;
             localStorage.setItem("accessToken", newAccessToken);
 
-            axios.get(`${process.env.REACT_APP_API_URL}/v1/my/profile`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/v1/user/profile`, {
               headers: {
                 "Authorization": newAccessToken
               }

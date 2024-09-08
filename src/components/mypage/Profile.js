@@ -47,7 +47,7 @@ function Profile() {
   };
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/v1/my/profile`, {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/user/profile`, {
       headers: {
         "Authorization": accessToken
       }
@@ -58,13 +58,13 @@ function Profile() {
       }
     }).catch((err) => {
       if (err.response.data.message === "토큰이 만료되었습니다.") {
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
           withCredentials: true
         }).then((res) => {
           if (res.data.statusCode === 200) {
             const newAccessToken = res.headers.authorization;
             localStorage.setItem("accessToken", newAccessToken);
-            axios.get(`${process.env.REACT_APP_API_URL}/v1/my/profile`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/v1/user/profile`, {
               headers: {
                 "Authorization": newAccessToken
               }
@@ -134,7 +134,7 @@ function Profile() {
       formData.append("data", new Blob([JSON.stringify({ password, newPassword, checkPassword })], { type: "application/json" }));
     }
 
-    axios.patch(`${process.env.REACT_APP_API_URL}/v1/my/profile`, formData, {
+    axios.patch(`${process.env.REACT_APP_API_URL}/v1/user/profile`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': accessToken
@@ -145,12 +145,12 @@ function Profile() {
       }
     }).catch((err) => {
       if (err.response.data.message === "토큰이 만료되었습니다.") {
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
           withCredentials: true
         }).then((res) => {
           if (res.data.statusCode === 200) {
             const newAccessToken = res.headers.authorization;
-            axios.patch(`${process.env.REACT_APP_API_URL}/v1/my/profile`, formData, {
+            axios.patch(`${process.env.REACT_APP_API_URL}/v1/user/profile`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': newAccessToken
@@ -189,7 +189,7 @@ function Profile() {
       return;
     }
 
-    axios.put(`${process.env.REACT_APP_API_URL}/v1/my/username`, {
+    axios.put(`${process.env.REACT_APP_API_URL}/v1/user/username`, {
       username: modifyInfo.username,
     }, {
       headers: {
@@ -204,12 +204,12 @@ function Profile() {
       }
     }).catch((err) => {
       if (err.response.data.message === "토큰이 만료되었습니다.") {
-        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/refresh`, {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/token/refresh`, {}, {
           withCredentials: true
         }).then((res) => {
           if (res.data.statusCode === 200) {
             const newAccessToken = res.headers.authorization;
-            axios.put(`${process.env.REACT_APP_API_URL}/v1/my/username`, {
+            axios.put(`${process.env.REACT_APP_API_URL}/v1/user/username`, {
               username: modifyInfo.username,
             }, {
               headers: {

@@ -51,9 +51,8 @@ function Signup() {
       });
     }
 
-    axios.post(`${process.env.REACT_APP_API_URL}/v1/auth/check`, {
-      username: signupInfo.username
-    }).then( (res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/v1/auth/check/${signupInfo.username}`)
+    .then( (res) => {
       if (res.data.statusCode === 200) {
 
         setMessage({
